@@ -11,6 +11,7 @@ Integrates and coordinates:
 import os
 import json
 import re
+import numpy as np
 from typing import Dict, Any, List, Optional
 from openai import OpenAI
 
