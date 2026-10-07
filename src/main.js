@@ -171,11 +171,15 @@ function initCaseSelector() {
   const selectEl = document.getElementById('patient-case-select');
   if (!selectEl) return;
 
-  selectEl.innerHTML = BENCHMARK_CASES.map((c, i) => `
-    <option value="${i}" ${i === currentCaseIndex ? 'selected' : ''}>
-      ${c.title} (${c.severity.toUpperCase()})
-    </option>
-  `).join('');
+  selectEl.innerHTML = BENCHMARK_CASES.map((c, i) => {
+    // Extract short dataset brand name (e.g. MIMIC-CXR, CheXpert, NLST, NIH-CXR14, etc.)
+    const shortDataset = (c.datasetSource || '').split('(')[0].trim();
+    return `
+      <option value="${i}" ${i === currentCaseIndex ? 'selected' : ''}>
+        ${shortDataset} — ${c.title}
+      </option>
+    `;
+  }).join('');
 
   selectEl.addEventListener('change', (e) => {
     const idx = parseInt(e.target.value, 10);
