@@ -3,18 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PULSE-CV | Multimodal Medical AI Co-Pilot</title>
-    <meta name="description" content="Evidence-based Multimodal Medical Image Intelligence assistant for chest radiography and clinical notes." />
-    <!-- Modern Clean Typography -->
+    <title>PULSE-CV | Multimodal Medical Intelligence</title>
+    <meta name="description" content="PULSE-CV: Multimodal Medical Image Intelligence Diagnostic Co-Pilot" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-DeVLd6s-.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-Dvyz1xIu.css">
+    <script type="module" crossorigin src="/assets/index-B_yEwhqv.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-D4j6OSFL.css">
   </head>
-  <body class="dark-theme">
+  <body class="light-theme">
     <div id="app">
-      <!-- Clean Top Navbar -->
+      <!-- Clean Top Navbar matching user mockup exactly -->
       <header class="app-header">
         <div class="header-left">
           <div class="brand-logo">
@@ -45,47 +44,48 @@
 
         <div class="header-right">
           <button id="theme-toggle" class="btn-icon" title="Toggle Theme">
-            <i data-lucide="sun"></i>
+            <i data-lucide="moon"></i>
           </button>
-          <button id="export-report-btn" class="btn-primary-outline">
+          <button id="export-report-btn" class="btn-summary-report">
             <i data-lucide="file-text"></i> Summary Report
           </button>
         </div>
       </header>
 
-      <!-- Main Clean Content Area -->
+      <!-- Main Viewport -->
       <main class="main-viewport">
-        <!-- ==================== TAB 1: USER-FRIENDLY CO-PILOT ==================== -->
+        <!-- ==================== TAB 1: CO-PILOT ==================== -->
         <section id="tab-copilot" class="tab-pane active">
           
-          <!-- Case Switcher Bar (Quick & Intuitive) -->
+          <!-- Top Patient Selection Toolbar -->
           <div class="clean-toolbar card">
-            <div class="toolbar-label">
-              <i data-lucide="user-check"></i>
-              <span>Select Sample Patient:</span>
+            <div class="toolbar-top-row">
+              <div class="toolbar-label">
+                <i data-lucide="user"></i>
+                <span>Select Sample Patient:</span>
+              </div>
+              <div class="case-chips-wrapper" id="case-chips-list">
+                <!-- Populated dynamically via JS -->
+              </div>
             </div>
-            <div class="case-chips-wrapper" id="case-chips-list">
-              <!-- Rendered via JS -->
-            </div>
-            <div class="toolbar-actions">
-              <label class="btn-secondary file-upload-btn" for="image-upload-input" title="Upload custom X-ray">
+            <div class="toolbar-bottom-row">
+              <label class="btn-upload-scan" for="image-upload-input" title="Upload Scan">
                 <i data-lucide="upload"></i> Upload Scan
               </label>
               <input type="file" id="image-upload-input" accept="image/*" class="sr-only" />
             </div>
           </div>
 
-          <!-- Focused 3-Column Diagnostic Workspace -->
+          <!-- 3-Column Diagnostic Workspace matching mockup -->
           <div class="copilot-workspace">
             
-            <!-- Column 1: The Image (Eyes) -->
+            <!-- Column 1: Medical Image (Vision) -->
             <div class="card workspace-card vision-card">
               <div class="card-head">
                 <div class="card-title">
                   <i data-lucide="eye" class="text-accent"></i>
                   <span>1. Medical Image (Vision)</span>
                 </div>
-                <!-- Simple 3 Mode Switcher -->
                 <div class="seg-mode-selector" id="seg-mode-group">
                   <button class="pill-btn" data-mode="raw">Raw Scan</button>
                   <button class="pill-btn active" data-mode="gradcam">Heatmap</button>
@@ -97,15 +97,13 @@
                 <div class="viewport-canvas-container" id="dicom-viewport">
                   <canvas id="medical-canvas" width="600" height="600"></canvas>
                   
-                  <!-- Hover Tooltip -->
                   <div id="canvas-inspection-tag" class="inspection-tag hidden">
-                    <span id="tag-act">Activation: 0.91</span>
+                    <span id="tag-act">Activation: 0.82 (x:210, y:190)</span>
                   </div>
 
-                  <!-- Discrete Canvas Controls -->
                   <div class="canvas-floating-controls">
                     <div class="slider-control">
-                      <span>Heatmap:</span>
+                      <span class="control-label">Heatmap</span>
                       <input type="range" id="heatmap-opacity" min="0" max="100" value="70">
                     </div>
                     <div class="zoom-pan-indicator">
@@ -116,40 +114,41 @@
                   </div>
                 </div>
 
-                <div class="quick-stat-bar">
-                  <span class="stat-tag"><i data-lucide="crosshair"></i> Finding: <strong id="peak-finding-text">Right Lower Lobe Opacity</strong></span>
+                <div class="finding-bar">
+                  <i data-lucide="crosshair" class="finding-icon"></i>
+                  <span>Finding: <strong id="peak-finding-text">Right Upper Lobe Circumscribed Nodule</strong></span>
                 </div>
               </div>
             </div>
 
-            <!-- Column 2: The Patient Story (Reader) -->
+            <!-- Column 2: Clinical Chart (Reader) -->
             <div class="card workspace-card ehr-card">
               <div class="card-head">
                 <div class="card-title">
                   <i data-lucide="file-text" class="text-info"></i>
                   <span>2. Clinical Chart (Reader)</span>
                 </div>
-                <span class="patient-id-badge" id="pt-id">PT-9482</span>
+                <span class="patient-id-badge" id="pt-id">PT-5519-CXR</span>
               </div>
 
               <div class="card-body">
-                <!-- Essential Demographics Only -->
+                <!-- Vitals Summary Strip -->
                 <div class="vitals-row">
                   <div class="vital-item">
-                    <span class="v-label">Patient:</span>
-                    <span class="v-val" id="pt-age-gender">64yo Male</span>
+                    <span class="v-label">PATIENT:</span>
+                    <span class="v-val" id="pt-age-gender">58 yo Female</span>
                   </div>
                   <div class="vital-item">
-                    <span class="v-label">SpO2:</span>
-                    <span class="v-val" id="pt-spo2">91%</span>
+                    <span class="v-label">SPO2:</span>
+                    <span class="v-val" id="pt-spo2">98% (Room Air)</span>
                   </div>
                   <div class="vital-item">
                     <span class="v-label">WBC:</span>
-                    <span class="v-val" id="pt-wbc">14.8k</span>
+                    <span class="v-val" id="pt-wbc">7.2 x10³/µL<br><small class="text-sub">(Normal)</small></span>
                   </div>
                 </div>
 
-                <!-- Clean Note with Highlighted Evidence -->
+                <!-- Doctor Notes with Highlighted Evidence -->
                 <div class="notes-wrapper">
                   <label class="section-label">Doctor Notes (Key symptoms highlighted):</label>
                   <div class="clinical-note-content" id="clinical-notes-render">
@@ -157,12 +156,12 @@
                   </div>
                 </div>
 
-                <!-- Quick Interaction Test -->
+                <!-- Quick Context Test Prompt -->
                 <div class="interactive-test-row">
                   <label class="section-label" for="custom-ehr-input">Quick Context Test:</label>
                   <div class="input-with-button">
-                    <input type="text" id="custom-ehr-input" placeholder="e.g. Try typing: patient is young and asymptomatic" />
-                    <button id="reanalyze-btn" class="btn-primary">
+                    <input type="text" id="custom-ehr-input" value="What is the actual problem" placeholder="What is the actual problem" />
+                    <button id="reanalyze-btn" class="btn-update-ai">
                       <i data-lucide="refresh-cw"></i> Update AI
                     </button>
                   </div>
@@ -170,58 +169,58 @@
               </div>
             </div>
 
-            <!-- Column 3: The AI Assistant Output (Brain) -->
-            <div class="card workspace-card copilot-card highlight-border">
+            <!-- Column 3: AI Second Opinion (The Brain) -->
+            <div class="card workspace-card copilot-card">
               <div class="card-head">
                 <div class="card-title">
-                  <i data-lucide="sparkles" class="text-warning"></i>
+                  <i data-lucide="sparkles" class="text-sparkle"></i>
                   <span>3. AI Second Opinion</span>
                 </div>
                 <div class="helper-pill">Physician Co-Pilot</div>
               </div>
 
               <div class="card-body">
-                <!-- Calibrated Confidence Widget -->
+                <!-- Calibrated Confidence Gauge -->
                 <div class="confidence-box">
                   <div class="conf-top">
-                    <span class="conf-title">Confidence</span>
-                    <span class="conf-score" id="confidence-percentage">78%</span>
+                    <span class="conf-title">CONFIDENCE</span>
+                    <span class="conf-score" id="confidence-percentage">72%</span>
                   </div>
                   <div class="conf-progress-track">
-                    <div class="conf-progress-fill" id="confidence-bar" style="width: 78%;"></div>
+                    <div class="conf-progress-fill" id="confidence-bar" style="width: 72%;"></div>
                   </div>
                   <div class="conf-subtext" id="cal-annotation-text">
                     High corroboration between image &amp; chart symptoms.
                   </div>
                 </div>
 
-                <!-- Grounded Receipts (Proof) -->
+                <!-- Evidence Proof Receipts -->
                 <div class="receipts-container">
-                  <div class="receipt-row">
+                  <div class="receipt-row receipt-image">
                     <span class="receipt-icon"><i data-lucide="map-pin"></i></span>
                     <div class="receipt-details">
-                      <span class="receipt-title">Image Proof:</span>
-                      <p id="receipt-vision-detail">Right Lower Lobe Consolidation</p>
+                      <span class="receipt-title">IMAGE PROOF:</span>
+                      <p id="receipt-vision-detail">Centroid: X=210, Y=190, Radius=45px</p>
                     </div>
                   </div>
-                  <div class="receipt-row">
+                  <div class="receipt-row receipt-chart">
                     <span class="receipt-icon"><i data-lucide="quote"></i></span>
                     <div class="receipt-details">
-                      <span class="receipt-title">Chart Proof:</span>
-                      <p id="receipt-text-detail">"Productive cough with purulent sputum, fevers 102.1°F"</p>
+                      <span class="receipt-title">CHART PROOF:</span>
+                      <p id="receipt-text-detail">"Former 25 pack-year cigarette smoker, quit 4 years ago... No cough, hemoptysis, fevers."</p>
                     </div>
                   </div>
                 </div>
 
-                <!-- Collegial Physician Recommendation -->
+                <!-- Physician Collegial Recommendation -->
                 <div class="physician-advisory-box">
                   <span class="advisory-title"><i data-lucide="stethoscope"></i> Recommended Next Steps:</span>
                   <p class="advisory-content" id="advisory-text-content">
-                    "Consider evaluating the right lower lobe for bacterial consolidation/pneumonia. Recommend sputum culture and empiric antibiotic coverage."
+                    "Doctor, consider evaluating the 14mm circumscribed solitary nodule in the right upper lobe. In view of smoking history, suggest Fleischner-guided high-resolution chest CT."
                   </p>
                 </div>
 
-                <!-- Clean Differential List -->
+                <!-- Differentials List -->
                 <div class="diff-container">
                   <span class="section-label">Top Differentials:</span>
                   <div class="diff-list" id="differentials-list">
@@ -234,7 +233,7 @@
           </div>
         </section>
 
-        <!-- ==================== TAB 2: ARCHITECTURE (CLEAR & VISUAL) ==================== -->
+        <!-- ==================== TAB 2: ARCHITECTURE ==================== -->
         <section id="tab-architecture" class="tab-pane">
           <div class="clean-section-header">
             <h2>How the Multimodal System Works</h2>
@@ -267,7 +266,6 @@
             </div>
           </div>
 
-          <!-- Code Snippet -->
           <div class="code-wrapper card">
             <div class="code-top">
               <span><i data-lucide="code"></i> Core Fusion Pipeline (PyTorch)</span>
@@ -295,7 +293,6 @@ probabilities = torch.sigmoid(classifier(fused_tokens.mean(dim=1)) / temperature
           </div>
 
           <div class="guardrails-clean-grid">
-            <!-- Rule 1 -->
             <div class="card guardrail-simple-card">
               <div class="rule-icon success"><i data-lucide="shield-check"></i></div>
               <h3>1. Zero Hallucinations</h3>
@@ -306,7 +303,6 @@ probabilities = torch.sigmoid(classifier(fused_tokens.mean(dim=1)) / temperature
               <div id="hallucination-test-result" class="test-result-box hidden"></div>
             </div>
 
-            <!-- Rule 2 -->
             <div class="card guardrail-simple-card">
               <div class="rule-icon warning"><i data-lucide="gauge"></i></div>
               <h3>2. Calibrated Confidence</h3>
@@ -317,11 +313,10 @@ probabilities = torch.sigmoid(classifier(fused_tokens.mean(dim=1)) / temperature
               <div id="degraded-scan-test-result" class="test-result-box hidden"></div>
             </div>
 
-            <!-- Rule 3 -->
             <div class="card guardrail-simple-card">
               <div class="rule-icon info"><i data-lucide="user-check"></i></div>
               <h3>3. Second Doctor, Not Replacement</h3>
-              <p class="rule-summary">The AI acts strictly as an assistant. It uses physician-to-physician phrasing: <em>"Consider evaluating X based on Y"</em> rather than blunt declarations.</p>
+              <p class="rule-summary">The AI acts strictly as an assistant. It uses physician-to-physician phrasing: <em>"Doctor, consider evaluating X based on Y"</em> rather than blunt declarations.</p>
               <button class="btn-secondary-sm" id="test-linter-btn">
                 <i data-lucide="check"></i> Test Language Filter
               </button>
@@ -338,7 +333,6 @@ probabilities = torch.sigmoid(classifier(fused_tokens.mean(dim=1)) / temperature
           </div>
 
           <div class="roadmap-steps-clean">
-            <!-- Phase 1 -->
             <div class="card phase-item">
               <div class="phase-left">
                 <span class="phase-step-badge">Phase 1</span>
@@ -355,7 +349,6 @@ probabilities = torch.sigmoid(classifier(fused_tokens.mean(dim=1)) / temperature
               </div>
             </div>
 
-            <!-- Phase 2 -->
             <div class="card phase-item highlight-border">
               <div class="phase-left">
                 <span class="phase-step-badge highlight">Phase 2</span>
@@ -372,7 +365,6 @@ probabilities = torch.sigmoid(classifier(fused_tokens.mean(dim=1)) / temperature
               </div>
             </div>
 
-            <!-- Phase 3 -->
             <div class="card phase-item">
               <div class="phase-left">
                 <span class="phase-step-badge">Phase 3</span>
@@ -392,29 +384,21 @@ probabilities = torch.sigmoid(classifier(fused_tokens.mean(dim=1)) / temperature
         </section>
       </main>
 
-      <!-- Clean Minimal Footer -->
-      <footer class="app-footer">
-        <span>PULSE-CV • Multimodal Medical Image Intelligence</span>
-        <span class="footer-sub">Evidence-Based • Calibrated Confidence • Non-Autonomous Co-Pilot</span>
-      </footer>
+      <!-- Modal Dialog -->
+      <dialog id="report-modal" class="modal">
+        <div class="modal-box card">
+          <div class="modal-header">
+            <h3><i data-lucide="file-text"></i> Clinical Diagnostic Summary</h3>
+            <button id="close-modal-btn" class="close-btn"><i data-lucide="x"></i></button>
+          </div>
+          <div class="modal-body" id="report-modal-body"></div>
+          <div class="modal-footer">
+            <button id="print-report-btn" class="btn-primary"><i data-lucide="printer"></i> Print / PDF</button>
+            <button id="dismiss-modal-btn" class="btn-secondary">Close</button>
+          </div>
+        </div>
+      </dialog>
     </div>
-
-    <!-- Clean Export Modal -->
-    <dialog id="report-modal" class="modal">
-      <div class="modal-box card">
-        <div class="modal-header">
-          <h3><i data-lucide="file-text"></i> Clinical Diagnostic Summary</h3>
-          <button id="close-modal-btn" class="close-btn"><i data-lucide="x"></i></button>
-        </div>
-        <div class="modal-body" id="report-modal-body">
-          <!-- Dynamically populated report -->
-        </div>
-        <div class="modal-footer">
-          <button id="print-report-btn" class="btn-primary"><i data-lucide="printer"></i> Print / PDF</button>
-          <button id="dismiss-modal-btn" class="btn-secondary">Close</button>
-        </div>
-      </div>
-    </dialog>
 
   </body>
 </html>
