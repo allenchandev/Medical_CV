@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initViewControls();
   initModelSelector();
   initInteractiveEHR();
+  initDoctorNotesModal();
   initGuardrailTests();
   initApiKeyModal();
   initExportModal();
