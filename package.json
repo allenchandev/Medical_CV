@@ -1,0 +1,26 @@
+{
+  "name": "medical_cv",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/allenchandev/Medical_CV.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/allenchandev/Medical_CV/issues"
+  },
+  "homepage": "https://github.com/allenchandev/Medical_CV#readme",
+  "devDependencies": {
+    "lucide": "^1.52.0",
+    "vite": "^8.3.3"
+  }
+}
