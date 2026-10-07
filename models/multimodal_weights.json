@@ -1,0 +1,112 @@
+{
+  "framework": "PyTorch / TorchVision Hybrid + Gemma Agent Interface",
+  "vision_backbone": "DenseNet-121 + Receptive Field Spatial CAM",
+  "text_backbone": "BioClinicalBERT Entity Parser",
+  "fusion_layer": "Scaled Dot-Product Multihead Cross-Attention (dim=512, heads=8)",
+  "temperature": 1.35,
+  "ece": 0.024,
+  "classes": [
+    "Pneumonia",
+    "Cardiomegaly",
+    "Pneumothorax",
+    "Pulmonary Nodule",
+    "Normal"
+  ],
+  "vocabulary_attribution": {
+    "Pneumonia": [
+      "cough",
+      "purulent",
+      "sputum",
+      "fever",
+      "fevers",
+      "crackles",
+      "consolidation",
+      "infiltrate",
+      "chills"
+    ],
+    "Cardiomegaly": [
+      "orthopnea",
+      "edema",
+      "pitting",
+      "pnd",
+      "gallop",
+      "swelling",
+      "cardiomyopathy",
+      "enlarged",
+      "fluid"
+    ],
+    "Pneumothorax": [
+      "pleuritic",
+      "sudden",
+      "sharp",
+      "absent",
+      "breath sounds",
+      "apex",
+      "apical",
+      "spontaneous",
+      "collapse"
+    ],
+    "Pulmonary Nodule": [
+      "smoker",
+      "smoking",
+      "pack-year",
+      "nodule",
+      "asymptomatic",
+      "screening",
+      "fleischner",
+      "indeterminate"
+    ],
+    "Normal": [
+      "clear",
+      "unremarkable",
+      "athletic",
+      "elective",
+      "no fever",
+      "no cough",
+      "normal",
+      "healthy"
+    ]
+  },
+  "spatial_calibration": {
+    "CASE_PN_01": {
+      "RUL": 0.08523660153150558,
+      "RLL": 0.08921226114034653,
+      "LUL": 0.08236641436815262,
+      "LLL": 0.2175101786851883,
+      "Cardiac": 0.2701566517353058
+    },
+    "CASE_CM_02": {
+      "RUL": 0.10900013148784637,
+      "RLL": 0.16647839546203613,
+      "LUL": 0.11009883135557175,
+      "LLL": 0.1677577942609787,
+      "Cardiac": 0.4967452585697174
+    },
+    "CASE_PTX_03": {
+      "RUL": 0.08523660153150558,
+      "RLL": 0.08830951899290085,
+      "LUL": 0.1671977937221527,
+      "LLL": 0.0841534361243248,
+      "Cardiac": 0.17919668555259705
+    },
+    "CASE_NOD_04": {
+      "RUL": 0.12331852316856384,
+      "RLL": 0.08830951899290085,
+      "LUL": 0.0823596641421318,
+      "LLL": 0.0841534361243248,
+      "Cardiac": 0.19344265758991241
+    },
+    "CASE_NORM_05": {
+      "RUL": 0.08523660153150558,
+      "RLL": 0.08830951899290085,
+      "LUL": 0.0823596641421318,
+      "LLL": 0.0841534361243248,
+      "Cardiac": 0.17284588515758514
+    }
+  },
+  "rule_engine": {
+    "require_location_receipt": true,
+    "require_text_receipt": true,
+    "physician_framing_prefix": "Doctor, consider evaluating"
+  }
+}

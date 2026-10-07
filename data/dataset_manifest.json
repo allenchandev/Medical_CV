@@ -1,0 +1,219 @@
+[
+  {
+    "id": "CASE_PN_01",
+    "label": "Pneumonia",
+    "category": "infectious",
+    "patient": {
+      "id": "PT-9482-CXR",
+      "age": 64,
+      "gender": "Male",
+      "spo2": "91%",
+      "wbc": "14.8k",
+      "history": "4-day worsening productive cough with rust-colored sputum, fevers reaching 102.1F, localized inspiratory crackles in right lower base."
+    },
+    "pathology_center": [
+      380,
+      390
+    ],
+    "pathology_radius": 85,
+    "intensity": 0.88,
+    "mask_polygon": [
+      [
+        310,
+        340
+      ],
+      [
+        360,
+        310
+      ],
+      [
+        430,
+        330
+      ],
+      [
+        470,
+        390
+      ],
+      [
+        460,
+        460
+      ],
+      [
+        400,
+        480
+      ],
+      [
+        330,
+        440
+      ],
+      [
+        305,
+        380
+      ]
+    ],
+    "image_path": "/run/media/lenwin/New Volume/ALLEN/PROJECT/Medical CV/Medical_CV/scripts/../data/images/CASE_PN_01.png"
+  },
+  {
+    "id": "CASE_CM_02",
+    "label": "Cardiomegaly",
+    "category": "cardiac",
+    "patient": {
+      "id": "PT-3104-CXR",
+      "age": 72,
+      "gender": "Female",
+      "spo2": "93%",
+      "wbc": "8.1k",
+      "history": "Progressive 3-pillow orthopnea, bilateral 2+ pitting leg edema, paroxysmal nocturnal dyspnea, S3 gallop, weight gain of 8 lbs over 10 days."
+    },
+    "pathology_center": [
+      300,
+      350
+    ],
+    "pathology_radius": 115,
+    "intensity": 0.82,
+    "mask_polygon": [
+      [
+        190,
+        310
+      ],
+      [
+        250,
+        240
+      ],
+      [
+        360,
+        260
+      ],
+      [
+        425,
+        340
+      ],
+      [
+        430,
+        440
+      ],
+      [
+        360,
+        480
+      ],
+      [
+        240,
+        465
+      ],
+      [
+        180,
+        400
+      ]
+    ],
+    "image_path": "/run/media/lenwin/New Volume/ALLEN/PROJECT/Medical CV/Medical_CV/scripts/../data/images/CASE_CM_02.png"
+  },
+  {
+    "id": "CASE_PTX_03",
+    "label": "Pneumothorax",
+    "category": "pleural",
+    "patient": {
+      "id": "PT-7729-CXR",
+      "age": 22,
+      "gender": "Male",
+      "spo2": "94%",
+      "wbc": "6.9k",
+      "history": "Acute onset sudden sharp left pleuritic chest pain while resting, dyspnea at rest, absent lung sounds over the left apex."
+    },
+    "pathology_center": [
+      420,
+      160
+    ],
+    "pathology_radius": 65,
+    "intensity": 0.92,
+    "mask_polygon": [
+      [
+        370,
+        110
+      ],
+      [
+        440,
+        95
+      ],
+      [
+        490,
+        140
+      ],
+      [
+        480,
+        210
+      ],
+      [
+        430,
+        240
+      ],
+      [
+        380,
+        190
+      ]
+    ],
+    "image_path": "/run/media/lenwin/New Volume/ALLEN/PROJECT/Medical CV/Medical_CV/scripts/../data/images/CASE_PTX_03.png"
+  },
+  {
+    "id": "CASE_NOD_04",
+    "label": "Pulmonary Nodule",
+    "category": "oncology_indeterminate",
+    "patient": {
+      "id": "PT-5519-CXR",
+      "age": 58,
+      "gender": "Female",
+      "spo2": "98%",
+      "wbc": "7.2k",
+      "history": "Asymptomatic executive screening. Former 25 pack-year cigarette smoker, quit 4 years ago. No cough, hemoptysis, fevers, or weight loss."
+    },
+    "pathology_center": [
+      210,
+      190
+    ],
+    "pathology_radius": 45,
+    "intensity": 0.79,
+    "mask_polygon": [
+      [
+        185,
+        175
+      ],
+      [
+        225,
+        170
+      ],
+      [
+        240,
+        195
+      ],
+      [
+        220,
+        215
+      ],
+      [
+        185,
+        205
+      ]
+    ],
+    "image_path": "/run/media/lenwin/New Volume/ALLEN/PROJECT/Medical CV/Medical_CV/scripts/../data/images/CASE_NOD_04.png"
+  },
+  {
+    "id": "CASE_NORM_05",
+    "label": "Normal Baseline",
+    "category": "healthy",
+    "patient": {
+      "id": "PT-1102-CXR",
+      "age": 34,
+      "gender": "Female",
+      "spo2": "99%",
+      "wbc": "6.0k",
+      "history": "Pre-operative assessment prior to elective laparoscopic surgery. No respiratory symptoms, clear breath sounds bilaterally, active athletic history."
+    },
+    "pathology_center": [
+      300,
+      300
+    ],
+    "pathology_radius": 0,
+    "intensity": 0.12,
+    "mask_polygon": [],
+    "image_path": "/run/media/lenwin/New Volume/ALLEN/PROJECT/Medical CV/Medical_CV/scripts/../data/images/CASE_NORM_05.png"
+  }
+]
