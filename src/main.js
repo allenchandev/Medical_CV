@@ -167,7 +167,7 @@ async function loadCase(index) {
     });
     if (res.ok) {
       const gemmaData = await res.json();
-      updateAIOutput(gemmaData.confidence, gemmaData.advisory, gemmaData.receipts.vision, gemmaData.receipts.text, c);
+      updateAIOutput(gemmaData.confidence, gemmaData.advisory, gemmaData.receipts.vision, gemmaData.receipts.text, c, gemmaData.actionable_next_steps);
       return;
     }
   } catch (err) {
@@ -176,10 +176,10 @@ async function loadCase(index) {
   }
 
   // Fallback to local
-  updateAIOutput(c.fusion.confidence, c.fusion.advisory, c.fusion.receiptVision, c.fusion.receiptText, c);
+  updateAIOutput(c.fusion.confidence, c.fusion.advisory, c.fusion.receiptVision, c.fusion.receiptText, c, null);
 }
 
-function updateAIOutput(confidence, advisory, receiptVision, receiptText, caseObj) {
+function updateAIOutput(confidence, advisory, receiptVision, receiptText, caseObj, nextSteps) {
   const confEl = document.getElementById('confidence-percentage');
   const barEl = document.getElementById('confidence-bar');
   confEl.textContent = `${confidence}%`;
@@ -199,6 +199,34 @@ function updateAIOutput(confidence, advisory, receiptVision, receiptText, caseOb
   // Clean doctor advisory
   const formattedAdvisory = advisory.startsWith('"') ? advisory : `"${advisory}"`;
   document.getElementById('advisory-text-content').textContent = formattedAdvisory;
+
+  // Render Actionable Next Steps
+  const stepsContainer = document.getElementById('actionable-steps-list');
+  if (stepsContainer) {
+    const stepsToRender = nextSteps && nextSteps.length > 0 ? nextSteps : [
+      { step: "High-Resolution Chest CT without Contrast", urgency: "High Priority", protocol: "Fleischner Society Guidelines" },
+      { step: "Compare with Previous Scans (Volume Doubling Time)", urgency: "Standard", protocol: "Serial Radiography Protocol" },
+      { step: "Pulmonology Consultation for Nodular Follow-up", urgency: "Elective", protocol: "Multidisciplinary Review" }
+    ];
+
+    stepsContainer.innerHTML = stepsToRender.map((s) => {
+      let badgeClass = 'urgency-standard';
+      const u = (s.urgency || '').toLowerCase();
+      if (u.includes('high') || u.includes('immediate') || u.includes('stat')) badgeClass = 'urgency-high';
+      else if (u.includes('urgent')) badgeClass = 'urgency-urgent';
+      else if (u.includes('routine')) badgeClass = 'urgency-routine';
+
+      return `
+        <div class="next-step-item">
+          <span class="step-urgency-badge ${badgeClass}">${s.urgency}</span>
+          <div class="step-content">
+            <span class="step-title">${s.step}</span>
+            <span class="step-protocol">${s.protocol || 'Clinical Protocol'}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
 
   // Differentials
   const diffContainer = document.getElementById('differentials-list');
@@ -255,7 +283,7 @@ function initInteractiveEHR() {
 
         if (res.ok) {
           const gemmaRes = await res.json();
-          updateAIOutput(gemmaRes.confidence, gemmaRes.advisory, gemmaRes.receipts.vision, gemmaRes.receipts.text, c);
+          updateAIOutput(gemmaRes.confidence, gemmaRes.advisory, gemmaRes.receipts.vision, gemmaRes.receipts.text, c, gemmaRes.actionable_next_steps);
           reanalyzeBtn.innerHTML = '<i data-lucide="refresh-cw"></i> Update AI';
           initIcons();
           return;
