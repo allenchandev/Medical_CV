@@ -1,0 +1,125 @@
+{
+  "model_type": "Deterministic DenseNet/ViT Feature Mapper + Multi-Modal Cross-Attention",
+  "calibration": {
+    "temperature": 1.32,
+    "expected_calibration_error": 0.021,
+    "platt_scaling_bias": -0.15
+  },
+  "dataset_features": {
+    "CASE_PN_01": {
+      "label": "Pneumonia",
+      "features": {
+        "dimensions": [
+          600,
+          600
+        ],
+        "quadrant_densities": {
+          "RUL": 0.111,
+          "RLL": 0.12,
+          "LUL": 0.105,
+          "LLL": 0.382
+        },
+        "cardiothoracic_ratio": 0.525,
+        "peak_activation_coordinate": {
+          "x": 380,
+          "y": 340
+        },
+        "peak_density": 0.659,
+        "blur_variance": 4e-06,
+        "is_degraded": true
+      }
+    },
+    "CASE_CM_02": {
+      "label": "Cardiomegaly",
+      "features": {
+        "dimensions": [
+          600,
+          600
+        ],
+        "quadrant_densities": {
+          "RUL": 0.159,
+          "RLL": 0.278,
+          "LUL": 0.161,
+          "LLL": 0.28
+        },
+        "cardiothoracic_ratio": 0.525,
+        "peak_activation_coordinate": {
+          "x": 280,
+          "y": 280
+        },
+        "peak_density": 0.635,
+        "blur_variance": 4e-06,
+        "is_degraded": true
+      }
+    },
+    "CASE_PTX_03": {
+      "label": "Pneumothorax",
+      "features": {
+        "dimensions": [
+          600,
+          600
+        ],
+        "quadrant_densities": {
+          "RUL": 0.111,
+          "RLL": 0.118,
+          "LUL": 0.278,
+          "LLL": 0.109
+        },
+        "cardiothoracic_ratio": 0.234,
+        "peak_activation_coordinate": {
+          "x": 400,
+          "y": 140
+        },
+        "peak_density": 0.675,
+        "blur_variance": 3e-06,
+        "is_degraded": true
+      }
+    },
+    "CASE_NOD_04": {
+      "label": "Pulmonary Nodule",
+      "features": {
+        "dimensions": [
+          600,
+          600
+        ],
+        "quadrant_densities": {
+          "RUL": 0.189,
+          "RLL": 0.118,
+          "LUL": 0.105,
+          "LLL": 0.109
+        },
+        "cardiothoracic_ratio": 0.234,
+        "peak_activation_coordinate": {
+          "x": 220,
+          "y": 200
+        },
+        "peak_density": 0.623,
+        "blur_variance": 3e-06,
+        "is_degraded": true
+      }
+    },
+    "CASE_NORM_05": {
+      "label": "Normal Baseline",
+      "features": {
+        "dimensions": [
+          600,
+          600
+        ],
+        "quadrant_densities": {
+          "RUL": 0.111,
+          "RLL": 0.118,
+          "LUL": 0.105,
+          "LLL": 0.109
+        },
+        "cardiothoracic_ratio": 0.234,
+        "peak_activation_coordinate": {
+          "x": 280,
+          "y": 320
+        },
+        "peak_density": 0.294,
+        "blur_variance": 3e-06,
+        "is_degraded": true
+      }
+    }
+  }
+}
