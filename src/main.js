@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initViewControls();
   initModelSelector();
   initInteractiveEHR();
+  initInlinePatientEditing();
   initDoctorNotesModal();
   initGuardrailTests();
   initApiKeyModal();
@@ -527,7 +528,8 @@ function initApiKeyModal() {
   const closeBtn = document.getElementById('close-api-key-modal');
   const dismissBtn = document.getElementById('dismiss-api-key-modal');
   const saveBtn = document.getElementById('save-api-key-btn');
-  const input = document.getElementById('openai-key-input');
+  const hfInput = document.getElementById('hf-token-input');
+  const openAiInput = document.getElementById('openai-key-input');
   const feedback = document.getElementById('api-key-feedback');
 
   if (openBtn && modal) {
@@ -536,12 +538,14 @@ function initApiKeyModal() {
     dismissBtn?.addEventListener('click', () => modal.close());
 
     saveBtn?.addEventListener('click', async () => {
-      const key = input.value.trim();
-      if (!key) {
+      const hfToken = hfInput ? hfInput.value.trim() : '';
+      const openAiKey = openAiInput ? openAiInput.value.trim() : '';
+
+      if (!hfToken && !openAiKey) {
         feedback.style.display = 'block';
         feedback.style.background = '#fef2f2';
         feedback.style.color = '#b91c1c';
-        feedback.textContent = 'Please enter a valid OpenAI API key or close the dialog.';
+        feedback.textContent = 'Please enter either a Hugging Face token or an OpenAI API key (or close dialog).';
         return;
       }
 
@@ -549,21 +553,33 @@ function initApiKeyModal() {
       initIcons();
 
       try {
+        const payload = {};
+        if (hfToken) payload.hf_token = hfToken;
+        if (openAiKey) payload.openai_key = openAiKey;
+
         const res = await fetch(`${BACKEND_API}/set-api-key`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ api_key: key })
+          body: JSON.stringify(payload)
         });
         const data = await res.json();
         feedback.style.display = 'block';
         feedback.style.background = '#f0fdf4';
         feedback.style.color = '#15803d';
-        feedback.textContent = data.message;
+        feedback.textContent = data.message || 'Configured successfully.';
 
         const keyBtn = document.getElementById('open-api-key-btn');
         const statusText = document.getElementById('api-key-status-text');
         if (keyBtn) keyBtn.classList.add('active');
-        if (statusText) statusText.textContent = 'OpenAI Connected';
+        if (statusText) {
+          if (data.hf_configured && data.openai_configured) {
+            statusText.textContent = 'HF + OpenAI Active';
+          } else if (data.hf_configured) {
+            statusText.textContent = 'HF Gemma Active';
+          } else if (data.openai_configured) {
+            statusText.textContent = 'OpenAI Active';
+          }
+        }
 
         setTimeout(() => {
           modal.close();
@@ -575,8 +591,65 @@ function initApiKeyModal() {
         feedback.style.color = '#b91c1c';
         feedback.textContent = 'Failed to connect to backend service.';
       } finally {
-        saveBtn.innerHTML = '<i data-lucide="save"></i> Connect OpenAI Models';
+        saveBtn.innerHTML = '<i data-lucide="save"></i> Save &amp; Connect Models';
         initIcons();
+      }
+    });
+  }
+}
+
+function initInlinePatientEditing() {
+  const ptIdEl = document.getElementById('pt-id');
+  const ptAgeGenderEl = document.getElementById('pt-age-gender');
+  const ptSpo2El = document.getElementById('pt-spo2');
+  const ptWbcEl = document.getElementById('pt-wbc');
+  const notesContainer = document.getElementById('clinical-notes-render');
+
+  const syncCaseAndReanalyze = async () => {
+    const c = BENCHMARK_CASES[currentCaseIndex];
+    if (!c) return;
+
+    if (ptIdEl) c.patient.id = ptIdEl.innerText.trim() || c.patient.id;
+    if (ptAgeGenderEl) c.patient.ageGender = ptAgeGenderEl.innerText.trim() || c.patient.ageGender;
+    if (ptSpo2El) c.patient.spo2 = ptSpo2El.innerText.trim() || c.patient.spo2;
+    if (ptWbcEl) c.patient.wbc = ptWbcEl.innerText.trim() || c.patient.wbc;
+    
+    if (notesContainer) {
+      const rawText = notesContainer.innerText.trim();
+      if (rawText) {
+        c.patient.notes = rawText;
+        const quickInput = document.getElementById('custom-ehr-input');
+        if (quickInput) {
+          quickInput.value = rawText.replace(/\[\[(.*?)\]\]/g, '$1').slice(0, 80);
+        }
+      }
+    }
+
+    await triggerAnalysis(c);
+  };
+
+  [ptIdEl, ptAgeGenderEl, ptSpo2El, ptWbcEl].forEach((el) => {
+    if (!el) return;
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        el.blur();
+      }
+    });
+    el.addEventListener('blur', () => {
+      syncCaseAndReanalyze();
+    });
+  });
+
+  if (notesContainer) {
+    notesContainer.addEventListener('blur', () => {
+      syncCaseAndReanalyze();
+      // Re-apply tokens styling on blur if user typed brackets
+      const c = BENCHMARK_CASES[currentCaseIndex];
+      if (c && c.patient.notes) {
+        notesContainer.innerHTML = c.patient.notes.replace(/\[\[(.*?)\]\]/g, (m, p1) => {
+          return `<span class="grounded-token">${p1}</span>`;
+        });
       }
     });
   }
@@ -584,11 +657,20 @@ function initApiKeyModal() {
 
 function initDoctorNotesModal() {
   const modal = document.getElementById('doctor-notes-modal');
-  const openBtn = document.getElementById('edit-doctor-notes-btn');
+  const editBtn = document.getElementById('edit-doctor-notes-btn');
+  const newPatientBtn = document.getElementById('add-new-patient-btn');
   const closeBtn = document.getElementById('close-doctor-notes-modal');
   const dismissBtn = document.getElementById('dismiss-doctor-notes-modal');
   const applyBtn = document.getElementById('apply-doctor-notes-btn');
+  const modalTitle = document.getElementById('patient-modal-title');
+
+  const ptIdInput = document.getElementById('modal-pt-id');
+  const ptAgeGenderInput = document.getElementById('modal-pt-age-gender');
+  const ptSpo2Input = document.getElementById('modal-pt-spo2');
+  const ptWbcInput = document.getElementById('modal-pt-wbc');
   const textarea = document.getElementById('doctor-notes-textarea');
+
+  let isNewPatientMode = false;
 
   const templates = {
     'fever-cough': "Patient presents with [[4-day worsening productive cough with purulent rust-colored sputum]]. Reports [[tactile fevers reaching 102.5°F]] and right pleuritic pain. Auscultation reveals [[dense inspiratory crackles in right lower base]]. Normal heart sounds.",
@@ -597,10 +679,28 @@ function initDoctorNotesModal() {
     'asymptomatic-screen': "Asymptomatic executive presenting for annual screening. [[Former 25 pack-year cigarette smoker, quit 4 years ago]]. [[Denies cough, hemoptysis, fevers, or dyspnea]]. Lungs clear bilaterally to auscultation."
   };
 
-  if (openBtn && modal && textarea) {
-    openBtn.addEventListener('click', () => {
+  if (editBtn && modal) {
+    editBtn.addEventListener('click', () => {
+      isNewPatientMode = false;
+      if (modalTitle) modalTitle.textContent = "Edit Patient & Doctor's Clinical Chart";
       const c = BENCHMARK_CASES[currentCaseIndex];
-      textarea.value = c?.patient?.notes || '';
+      if (ptIdInput) ptIdInput.value = c?.patient?.id || '';
+      if (ptAgeGenderInput) ptAgeGenderInput.value = c?.patient?.ageGender || '';
+      if (ptSpo2Input) ptSpo2Input.value = c?.patient?.spo2 || '';
+      if (ptWbcInput) ptWbcInput.value = c?.patient?.wbc || '';
+      if (textarea) textarea.value = c?.patient?.notes || '';
+      modal.showModal();
+    });
+
+    newPatientBtn?.addEventListener('click', () => {
+      isNewPatientMode = true;
+      if (modalTitle) modalTitle.textContent = "Add New Patient Case";
+      const randomNum = Math.floor(1000 + Math.random() * 9000);
+      if (ptIdInput) ptIdInput.value = `PT-NEW-${randomNum}`;
+      if (ptAgeGenderInput) ptAgeGenderInput.value = "52 yo Male";
+      if (ptSpo2Input) ptSpo2Input.value = "96% (Room Air)";
+      if (ptWbcInput) ptWbcInput.value = "7.8 x10³/µL (Normal)";
+      if (textarea) textarea.value = "Patient presents for chest examination. [[Cough and dyspnea on exertion]] for 1 week. Auscultation reveals [[focal crackles in right mid-zone]].";
       modal.showModal();
     });
 
@@ -611,39 +711,100 @@ function initDoctorNotesModal() {
     modal.querySelectorAll('.template-chip').forEach((chip) => {
       chip.addEventListener('click', () => {
         const key = chip.dataset.template;
-        if (templates[key]) {
+        if (templates[key] && textarea) {
           textarea.value = templates[key];
         }
       });
     });
 
     applyBtn?.addEventListener('click', async () => {
-      const newNotes = textarea.value.trim();
-      if (!newNotes) return;
+      const newNotes = textarea?.value?.trim() || '';
+      const newId = ptIdInput?.value?.trim() || `PT-CUSTOM-${Math.floor(1000 + Math.random() * 9000)}`;
+      const newAgeGender = ptAgeGenderInput?.value?.trim() || 'Adult';
+      const newSpo2 = ptSpo2Input?.value?.trim() || '98%';
+      const newWbc = ptWbcInput?.value?.trim() || '7.5 x10³/µL';
 
       applyBtn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> Updating AI...';
       initIcons();
 
-      const c = BENCHMARK_CASES[currentCaseIndex];
-      c.patient.notes = newNotes;
+      if (isNewPatientMode) {
+        // Create new patient case object and add to cases list
+        const newCase = {
+          id: `case-custom-${Date.now()}`,
+          datasetSource: "Clinical Physician Case (User Added)",
+          title: "Custom Patient Case",
+          severity: "moderate",
+          category: "Physician Created",
+          patient: {
+            id: newId,
+            ageGender: newAgeGender,
+            spo2: newSpo2,
+            wbc: newWbc,
+            notes: newNotes
+          },
+          vision: {
+            backbone: "DenseNet-121 + ViT-B/16 (RadImageNet Pre-trained)",
+            finding: "Thoracic Evaluation Pending",
+            peakActivation: "0.80",
+            heatCenter: { x: 300, y: 300, radius: 60 },
+            polygon: [
+              [240, 240], [360, 240], [360, 360], [240, 360]
+            ],
+            description: "Custom user-defined clinical case examination."
+          },
+          fusion: {
+            confidence: 75,
+            reliability: "PHYSICIAN INPUT GROUNDED",
+            reliabilityDesc: "Clinical record authored by physician.",
+            visionWeight: 50,
+            textWeight: 50,
+            receiptVision: "Centroid: X=300, Y=300",
+            receiptText: newNotes.slice(0, 100),
+            advisory: "Clinical case initialized with physician history and physical.",
+            next_steps: [
+              { step: "Evaluate chest radiograph concordance", urgency: "Standard", protocol: "Clinical Exam" },
+              { step: "Correlate with laboratory findings", urgency: "Standard", protocol: "Physician Discretion" }
+            ],
+            differentials: [
+              { name: "Clinical Diagnosis Pending", conf: 75 }
+            ]
+          }
+        };
 
-      // Update EHR notes render box with highlighted tokens
-      const notesContainer = document.getElementById('clinical-notes-render');
-      if (notesContainer) {
-        notesContainer.innerHTML = newNotes.replace(/\[\[(.*?)\]\]/g, (m, p1) => {
-          return `<span class="grounded-token">${p1}</span>`;
-        });
+        BENCHMARK_CASES.push(newCase);
+        initCaseSelector();
+        currentCaseIndex = BENCHMARK_CASES.length - 1;
+        loadCase(currentCaseIndex);
+      } else {
+        const c = BENCHMARK_CASES[currentCaseIndex];
+        c.patient.id = newId;
+        c.patient.ageGender = newAgeGender;
+        c.patient.spo2 = newSpo2;
+        c.patient.wbc = newWbc;
+        c.patient.notes = newNotes;
+
+        // Sync UI fields
+        document.getElementById('pt-id').textContent = newId;
+        document.getElementById('pt-age-gender').textContent = newAgeGender;
+        document.getElementById('pt-spo2').textContent = newSpo2;
+        document.getElementById('pt-wbc').textContent = newWbc;
+
+        const notesContainer = document.getElementById('clinical-notes-render');
+        if (notesContainer) {
+          notesContainer.innerHTML = newNotes.replace(/\[\[(.*?)\]\]/g, (m, p1) => {
+            return `<span class="grounded-token">${p1}</span>`;
+          });
+        }
+
+        const quickInput = document.getElementById('custom-ehr-input');
+        if (quickInput) {
+          quickInput.value = newNotes.replace(/\[\[(.*?)\]\]/g, '$1').slice(0, 80);
+        }
+
+        await triggerAnalysis(c);
       }
 
-      // Also sync to Quick Context input
-      const quickInput = document.getElementById('custom-ehr-input');
-      if (quickInput) {
-        quickInput.value = newNotes.replace(/\[\[(.*?)\]\]/g, '$1').slice(0, 80);
-      }
-
-      await triggerAnalysis(c);
-
-      applyBtn.innerHTML = '<i data-lucide="check"></i> Submit Doctor\'s Note to AI';
+      applyBtn.innerHTML = '<i data-lucide="check"></i> Save &amp; Consult AI';
       initIcons();
       modal.close();
     });

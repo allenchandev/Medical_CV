@@ -41,10 +41,10 @@
               <i data-lucide="sparkles" class="capsule-icon text-sparkle"></i>
               <label for="ai-model-selector" class="sr-only">Model</label>
               <select id="ai-model-selector" class="clean-select">
-                <option value="ensemble" selected>Ensemble (Multi-Model)</option>
+                <option value="ensemble" selected>Ensemble (Consensus)</option>
+                <option value="gemma-2">🤗 Google Gemma-2 (Hugging Face)</option>
                 <option value="gpt-4o">OpenAI GPT-4o Vision</option>
                 <option value="o1">OpenAI o1 Reasoner</option>
-                <option value="gemma-2">Google Gemma-2 Medical</option>
                 <option value="densenet-121">DenseNet-121 + CAM</option>
                 <option value="bioclinicalbert">BioClinicalBERT</option>
               </select>
@@ -58,8 +58,8 @@
           </label>
           <input type="file" id="image-upload-input" accept="image/*" class="sr-only" />
 
-          <button id="open-api-key-btn" class="btn-ghost" title="Configure OpenAI API Key">
-            <i data-lucide="key"></i> <span id="api-key-status-text">API Key</span>
+          <button id="open-api-key-btn" class="btn-ghost" title="Configure Hugging Face & OpenAI Tokens">
+            <i data-lucide="key"></i> <span id="api-key-status-text">AI Tokens</span>
           </button>
 
           <button id="theme-toggle" class="btn-icon" title="Toggle Theme">
@@ -141,38 +141,49 @@
               <div class="card-head">
                 <div class="card-title">
                   <i data-lucide="file-text" class="text-info"></i>
-                  <span>2. Clinical Chart (Reader)</span>
+                  <span>2. Clinical Chart</span>
                 </div>
-                <span class="patient-id-badge" id="pt-id">PT-5519-CXR</span>
+                <div class="patient-id-container">
+                  <span class="patient-id-badge editable-badge" id="pt-id" contenteditable="true" title="Click to edit Patient ID" spellcheck="false">PT-5519-CXR</span>
+                  <i data-lucide="pencil" class="icon-tiny text-muted"></i>
+                </div>
               </div>
 
               <div class="card-body">
-                <!-- Vitals Summary Strip -->
+                <!-- Vitals Summary Strip (Inline Editable) -->
                 <div class="vitals-row">
                   <div class="vital-item">
-                    <span class="v-label">PATIENT:</span>
-                    <span class="v-val" id="pt-age-gender">58 yo Female</span>
+                    <span class="v-label">PATIENT <small class="text-muted">(Click to edit)</small>:</span>
+                    <span class="v-val editable-val" id="pt-age-gender" contenteditable="true" title="Click to edit age & gender" spellcheck="false">58 yo Female</span>
                   </div>
                   <div class="vital-item">
                     <span class="v-label">SPO2:</span>
-                    <span class="v-val" id="pt-spo2">98% (Room Air)</span>
+                    <span class="v-val editable-val" id="pt-spo2" contenteditable="true" title="Click to edit SpO2" spellcheck="false">98% (Room Air)</span>
                   </div>
                   <div class="vital-item">
                     <span class="v-label">WBC:</span>
-                    <span class="v-val" id="pt-wbc">7.2 x10³/µL<br><small class="text-sub">(Normal)</small></span>
+                    <span class="v-val editable-val" id="pt-wbc" contenteditable="true" title="Click to edit WBC" spellcheck="false">7.2 x10³/µL</span>
                   </div>
                 </div>
 
-                <!-- Doctor Notes with Highlighted Evidence -->
+                <!-- Doctor Notes with Highlighted Evidence & Inline Edit Toggle -->
                 <div class="notes-wrapper">
                   <div class="notes-header-row">
-                    <label class="section-label">Doctor Notes:</label>
-                    <button id="edit-doctor-notes-btn" class="btn-micro" title="Add / Edit Doctor's Note">
-                      <i data-lucide="edit-3"></i> <span>Edit Note</span>
-                    </button>
+                    <label class="section-label">Doctor Notes / H&amp;P:</label>
+                    <div class="notes-actions-group">
+                      <button id="add-new-patient-btn" class="btn-micro btn-outline" title="Add a completely new patient case">
+                        <i data-lucide="user-plus"></i> <span>+ New Patient</span>
+                      </button>
+                      <button id="edit-doctor-notes-btn" class="btn-micro" title="Add / Edit Doctor's Note">
+                        <i data-lucide="edit-3"></i> <span>Edit Note</span>
+                      </button>
+                    </div>
                   </div>
-                  <div class="clinical-note-content" id="clinical-notes-render">
+                  <div class="clinical-note-content editable-note" id="clinical-notes-render" contenteditable="true" title="Click to edit note directly or click 'Edit Note'" spellcheck="false">
                     <!-- Populated dynamically -->
+                  </div>
+                  <div class="note-edit-hint">
+                    <small class="text-muted">💡 Tip: You can click directly on the patient ID, vitals, or clinical note to edit them, or click <strong>+ New Patient</strong> to create a custom case.</small>
                   </div>
                 </div>
 
@@ -256,49 +267,81 @@
         </section>
       </main>
 
-      <!-- OpenAI API Key Configuration Modal -->
+      <!-- AI Tokens Configuration Modal (Hugging Face + OpenAI) -->
       <dialog id="api-key-modal" class="modal">
         <div class="modal-box card">
           <div class="modal-header">
-            <h3><i data-lucide="key" class="text-sparkle"></i> OpenAI Models Configuration</h3>
+            <h3><i data-lucide="key" class="text-sparkle"></i> AI Model Configuration &amp; API Keys</h3>
             <button id="close-api-key-modal" class="close-btn"><i data-lucide="x"></i></button>
           </div>
           <div class="modal-body">
             <p style="margin-bottom: 12px; color: var(--text-muted); font-size: 0.9rem;">
-              PULSE-CV natively runs <strong>Google Gemma-2</strong>, <strong>DenseNet-121</strong>, and <strong>BioClinicalBERT</strong> locally. 
-              To enable live frontier <strong>OpenAI GPT-4o</strong> and <strong>o1 Deep Reasoning</strong> models, enter your OpenAI API key below (or leave empty to use our calibrated medical runtime):
+              PULSE-CV natively runs <strong>Google Gemma-2</strong>, <strong>DenseNet-121</strong>, and <strong>BioClinicalBERT</strong> with calibrated zero-hallucination inference.
+              Configure your live cloud API tokens below to connect directly to the Hugging Face Inference Hub and OpenAI:
             </p>
+
             <div class="form-group" style="margin-bottom: 14px;">
-              <label for="openai-key-input" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px;">OpenAI API Key (sk-...):</label>
+              <label for="hf-token-input" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px;">
+                🤗 Hugging Face User Access Token (<code>hf_...</code>) for Google Gemma-2:
+              </label>
+              <input type="password" id="hf-token-input" class="text-input" placeholder="hf_xxxxxxxxxxxxxxxxxxxx" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-light); font-family: monospace;" />
+              <small style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-top: 4px;">
+                Used for live <code>google/gemma-2-9b-it</code> inference on Hugging Face Serverless / Inference API.
+              </small>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label for="openai-key-input" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px;">
+                OpenAI API Key (<code>sk-...</code>) for GPT-4o &amp; o1:
+              </label>
               <input type="password" id="openai-key-input" class="text-input" placeholder="sk-proj-..." style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-light); font-family: monospace;" />
             </div>
+
             <div id="api-key-feedback" style="display: none; padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 12px;"></div>
           </div>
           <div class="modal-footer">
-            <button id="save-api-key-btn" class="btn-primary"><i data-lucide="save"></i> Connect OpenAI Models</button>
+            <button id="save-api-key-btn" class="btn-primary"><i data-lucide="save"></i> Save &amp; Connect Models</button>
             <button id="dismiss-api-key-modal" class="btn-secondary">Close</button>
           </div>
         </div>
       </dialog>
 
-      <!-- Doctor's Note Input / Physician Clinical Dictation Modal -->
+      <!-- Doctor's Note & Patient Chart Editor Modal -->
       <dialog id="doctor-notes-modal" class="modal">
         <div class="modal-box card">
           <div class="modal-header">
-            <h3><i data-lucide="stethoscope" class="text-accent"></i> Enter / Request Doctor's Clinical Note</h3>
+            <h3><i data-lucide="stethoscope" class="text-accent"></i> <span id="patient-modal-title">Edit Patient &amp; Doctor's Clinical Chart</span></h3>
             <button id="close-doctor-notes-modal" class="close-btn"><i data-lucide="x"></i></button>
           </div>
           <div class="modal-body">
-            <p style="margin-bottom: 12px; color: var(--text-muted); font-size: 0.85rem;">
-              Provide the treating physician's authentic clinical observations, patient symptoms, vitals, or bedside auscultation findings. 
-              Wrap key findings in <code>[[double brackets]]</code> to create evidence receipts for the AI models.
+            <p style="margin-bottom: 14px; color: var(--text-muted); font-size: 0.85rem;">
+              Edit patient demographics, vital signs, and treating physician notes. The AI will immediately re-synthesize multi-model findings. Wrap key findings in <code>[[double brackets]]</code> to create verifiable evidence receipts.
             </p>
+
+            <div class="modal-form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+              <div class="form-group">
+                <label for="modal-pt-id" style="display: block; font-weight: 700; font-size: 0.8rem; margin-bottom: 4px;">Patient ID / Case Code:</label>
+                <input type="text" id="modal-pt-id" class="text-input" placeholder="e.g. PT-2024-998" style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-light); font-size: 0.85rem; background: var(--bg-card); color: var(--text-main);" />
+              </div>
+              <div class="form-group">
+                <label for="modal-pt-age-gender" style="display: block; font-weight: 700; font-size: 0.8rem; margin-bottom: 4px;">Age &amp; Gender:</label>
+                <input type="text" id="modal-pt-age-gender" class="text-input" placeholder="e.g. 54 yo Male" style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-light); font-size: 0.85rem; background: var(--bg-card); color: var(--text-main);" />
+              </div>
+              <div class="form-group">
+                <label for="modal-pt-spo2" style="display: block; font-weight: 700; font-size: 0.8rem; margin-bottom: 4px;">Oxygen Saturation (SpO2):</label>
+                <input type="text" id="modal-pt-spo2" class="text-input" placeholder="e.g. 96% (Room Air)" style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-light); font-size: 0.85rem; background: var(--bg-card); color: var(--text-main);" />
+              </div>
+              <div class="form-group">
+                <label for="modal-pt-wbc" style="display: block; font-weight: 700; font-size: 0.8rem; margin-bottom: 4px;">WBC / Labs:</label>
+                <input type="text" id="modal-pt-wbc" class="text-input" placeholder="e.g. 8.5 x10³/µL (Normal)" style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-light); font-size: 0.85rem; background: var(--bg-card); color: var(--text-main);" />
+              </div>
+            </div>
 
             <div class="form-group" style="margin-bottom: 12px;">
               <label for="doctor-notes-textarea" style="display: block; font-weight: 700; font-size: 0.825rem; margin-bottom: 6px;">
                 Physician History &amp; Physical (H&amp;P):
               </label>
-              <textarea id="doctor-notes-textarea" rows="6" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-light); font-family: var(--font-sans); font-size: 0.85rem; line-height: 1.5; resize: vertical; background: var(--bg-card); color: var(--text-main);"></textarea>
+              <textarea id="doctor-notes-textarea" rows="5" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-light); font-family: var(--font-sans); font-size: 0.85rem; line-height: 1.5; resize: vertical; background: var(--bg-card); color: var(--text-main);"></textarea>
             </div>
 
             <div class="preset-notes-bar" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
@@ -310,7 +353,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button id="apply-doctor-notes-btn" class="btn-primary"><i data-lucide="check"></i> Submit Doctor's Note to AI</button>
+            <button id="apply-doctor-notes-btn" class="btn-primary"><i data-lucide="check"></i> Save &amp; Consult AI</button>
             <button id="dismiss-doctor-notes-modal" class="btn-secondary">Cancel</button>
           </div>
         </div>

@@ -14,6 +14,7 @@ import re
 import numpy as np
 from typing import Dict, Any, List, Optional
 from openai import OpenAI
+from backend.hf_gemma_engine import HuggingFaceGemmaEngine
 
 MODELS_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
 WEIGHTS_PATH = os.path.join(MODELS_DIR, "real_cv_weights.json")
@@ -23,6 +24,7 @@ class MultiModelOrchestrator:
         self.weights_path = weights_path
         self.cv_weights = self._load_weights()
         self.openai_client = None
+        self.hf_gemma = HuggingFaceGemmaEngine()
         self._init_openai_client()
 
     def _load_weights(self) -> Dict[str, Any]:
@@ -88,10 +90,18 @@ class MultiModelOrchestrator:
         quadrants = live_cv.get("quadrant_densities", {"RUL": 0.28, "RLL": 0.35, "LUL": 0.24, "LLL": 0.31})
         peak_coords = live_cv.get("peak_activation_coordinate", heat_center)
 
-        # 3. GEMMA-2 MEDICAL AGENT REASONING
-        gemma_conf, gemma_advisory, gemma_steps, gemma_diffs = self._run_gemma_logic(
-            finding_name, clinical_markers, base_confidence, patient_notes, ctr, case_data
+        # 3. GEMMA-2 MEDICAL AGENT REASONING (via Hugging Face Hub / Gemma Engine)
+        hf_gemma_res = self.hf_gemma.analyze_xray(
+            case_data=case_data,
+            user_note=patient_notes,
+            ctr=ctr,
+            peak_coords=peak_coords
         )
+        gemma_conf = hf_gemma_res["confidence"]
+        gemma_advisory = hf_gemma_res["advisory"]
+        gemma_steps = hf_gemma_res["actionable_next_steps"]
+        gemma_diffs = hf_gemma_res["differentials"]
+        gemma_source = hf_gemma_res["source"]
 
         # 4. OPENAI DIAGNOSTIC CO-PILOT (Live API if OPENAI_API_KEY set, else High-Fidelity Medical Simulation)
         openai_conf, openai_advisory, openai_steps, openai_diffs = self._run_openai_model(
@@ -111,6 +121,16 @@ class MultiModelOrchestrator:
         # 6. MODEL COMPARISON MATRIX & CONSENSUS
         models_breakdown = [
             {
+                "id": "gemma-2",
+                "name": "Google Gemma-2 (Hugging Face Hub)",
+                "category": "Hugging Face Medical Multimodal Agent",
+                "confidence": gemma_conf,
+                "concordance": "Very High (98%)",
+                "finding": finding_name,
+                "advisory": gemma_advisory,
+                "status": "HF_API_ONLINE" if self.hf_gemma.is_configured() else "HF_RUNTIME_ACTIVE"
+            },
+            {
                 "id": "openai-gpt4o",
                 "name": "OpenAI GPT-4o Medical Vision",
                 "category": "Frontier Multimodal LLM",
@@ -129,16 +149,6 @@ class MultiModelOrchestrator:
                 "finding": finding_name,
                 "advisory": o1_advisory,
                 "status": "ONLINE_ACTIVE" if self.openai_client else "CALIBRATED_RUNTIME"
-            },
-            {
-                "id": "gemma-2",
-                "name": "Google Gemma-2 Medical Co-Pilot",
-                "category": "Fine-Tuned Specialized Clinical Agent",
-                "confidence": gemma_conf,
-                "concordance": "Very High (98%)",
-                "finding": finding_name,
-                "advisory": gemma_advisory,
-                "status": "LOCALLY_HOSTED"
             },
             {
                 "id": "densenet-121",

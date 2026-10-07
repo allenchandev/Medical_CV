@@ -49,8 +49,10 @@ class HallucinationCheckRequest(BaseModel):
     has_image_location: bool
     has_text_quote: bool
 
-class ApiKeyRequest(BaseModel):
-    api_key: str
+class TokenConfigRequest(BaseModel):
+    openai_key: Optional[str] = None
+    api_key: Optional[str] = None
+    hf_token: Optional[str] = None
 
 @app.get("/api/health")
 def health():
@@ -58,13 +60,15 @@ def health():
         "status": "online",
         "agent": "PULSE-CV Multi-Model Diagnostic Engine",
         "openai_available": bool(orchestrator.openai_client or os.environ.get("OPENAI_API_KEY")),
+        "hf_available": bool(orchestrator.hf_gemma.is_configured() or os.environ.get("HF_TOKEN")),
+        "hf_model": orchestrator.hf_gemma.default_model,
         "model_trained": True,
         "calibration_ece": 0.019,
         "supported_models": [
             "Multi-Model Ensemble",
+            "Google Gemma-2 (Hugging Face Hub)",
             "OpenAI GPT-4o",
             "OpenAI o1 Deep Reasoner",
-            "Google Gemma-2 Medical Agent",
             "DenseNet-121 + CAM",
             "BioClinicalBERT NLP"
         ],
@@ -83,13 +87,22 @@ def list_datasets():
     return {"count": 0, "datasets": []}
 
 @app.post("/api/set-api-key")
-def set_api_key(req: ApiKeyRequest):
-    os.environ["OPENAI_API_KEY"] = req.api_key.strip()
-    orchestrator._init_openai_client()
+def set_api_key(req: TokenConfigRequest):
+    messages = []
+    openai_token = req.openai_key or req.api_key
+    if openai_token:
+        os.environ["OPENAI_API_KEY"] = openai_token.strip()
+        orchestrator._init_openai_client()
+        messages.append("OpenAI API configured.")
+    if req.hf_token:
+        orchestrator.hf_gemma.set_token(req.hf_token.strip())
+        messages.append("Hugging Face Hub (Gemma-2) configured.")
+
     return {
         "status": "success",
         "openai_configured": bool(orchestrator.openai_client),
-        "message": "OpenAI API Key successfully registered for live frontier model inference."
+        "hf_configured": orchestrator.hf_gemma.is_configured(),
+        "message": " ".join(messages) or "Tokens updated successfully."
     }
 
 @app.post("/api/analyze")
