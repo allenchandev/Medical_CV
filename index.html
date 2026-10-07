@@ -176,7 +176,14 @@
 
                 <!-- Doctor Notes with Highlighted Evidence -->
                 <div class="notes-wrapper">
-                  <label class="section-label">Doctor Notes (Key symptoms highlighted):</label>
+                  <div class="notes-header-row">
+                    <label class="section-label">Doctor Notes (Key symptoms highlighted):</label>
+                    <div class="notes-actions">
+                      <button id="edit-doctor-notes-btn" class="btn-micro" title="Add / Edit Doctor's Note">
+                        <i data-lucide="edit-3"></i> <span>Ask / Enter Doctor's Note</span>
+                      </button>
+                    </div>
+                  </div>
                   <div class="clinical-note-content" id="clinical-notes-render">
                     <!-- Populated dynamically -->
                   </div>
@@ -399,6 +406,41 @@
           <div class="modal-footer">
             <button id="save-api-key-btn" class="btn-primary"><i data-lucide="save"></i> Connect OpenAI Models</button>
             <button id="dismiss-api-key-modal" class="btn-secondary">Close</button>
+          </div>
+        </div>
+      </dialog>
+
+      <!-- Doctor's Note Input / Physician Clinical Dictation Modal -->
+      <dialog id="doctor-notes-modal" class="modal">
+        <div class="modal-box card">
+          <div class="modal-header">
+            <h3><i data-lucide="stethoscope" class="text-accent"></i> Enter / Request Doctor's Clinical Note</h3>
+            <button id="close-doctor-notes-modal" class="close-btn"><i data-lucide="x"></i></button>
+          </div>
+          <div class="modal-body">
+            <p style="margin-bottom: 12px; color: var(--text-muted); font-size: 0.85rem;">
+              Provide the treating physician's authentic clinical observations, patient symptoms, vitals, or bedside auscultation findings. 
+              Wrap key findings in <code>[[double brackets]]</code> to create evidence receipts for the AI models.
+            </p>
+
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label for="doctor-notes-textarea" style="display: block; font-weight: 700; font-size: 0.825rem; margin-bottom: 6px;">
+                Physician History &amp; Physical (H&amp;P):
+              </label>
+              <textarea id="doctor-notes-textarea" rows="6" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-light); font-family: var(--font-sans); font-size: 0.85rem; line-height: 1.5; resize: vertical; background: var(--bg-card); color: var(--text-main);"></textarea>
+            </div>
+
+            <div class="preset-notes-bar" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
+              <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); align-self: center;">Quick Clinical Templates:</span>
+              <button type="button" class="template-chip" data-template="fever-cough">Severe Febrile Pneumonia</button>
+              <button type="button" class="template-chip" data-template="heart-failure">Decompensated Heart Failure</button>
+              <button type="button" class="template-chip" data-template="pleuritic-ptx">Sudden Pleuritic Pneumothorax</button>
+              <button type="button" class="template-chip" data-template="asymptomatic-screen">Asymptomatic Clearance</button>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="apply-doctor-notes-btn" class="btn-primary"><i data-lucide="check"></i> Submit Doctor's Note to AI</button>
+            <button id="dismiss-doctor-notes-modal" class="btn-secondary">Cancel</button>
           </div>
         </div>
       </dialog>
