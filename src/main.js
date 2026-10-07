@@ -215,6 +215,10 @@ async function loadCase(index) {
   // 1. Vision
   renderer.setCase(c);
   document.getElementById('peak-finding-text').textContent = c.vision.finding;
+  const sourceTag = document.getElementById('dataset-source-tag');
+  if (sourceTag && c.datasetSource) {
+    sourceTag.textContent = c.datasetSource;
+  }
 
   // 2. Text (EHR)
   document.getElementById('pt-id').textContent = c.patient.id;

@@ -293,6 +293,10 @@ body {
 
 .toolbar-bottom-row {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .btn-upload-scan {
@@ -311,6 +315,30 @@ body {
 }
 .btn-upload-scan:hover {
   background: var(--bg-tertiary);
+}
+
+.dataset-source-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background: #f8fafc;
+  padding: 4px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+body.dark-theme .dataset-source-indicator {
+  background: #0f172a;
+}
+.dataset-source-indicator strong {
+  color: #0284c7;
+}
+.text-success {
+  color: #16a34a !important;
+}
+.source-tag-divider {
+  color: var(--border-light);
 }
 
 /* 3-Column Diagnostic Workspace */
