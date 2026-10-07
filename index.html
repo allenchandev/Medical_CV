@@ -204,10 +204,21 @@
 
                 <!-- Physician Collegial Recommendation -->
                 <div class="physician-advisory-box">
-                  <span class="advisory-title"><i data-lucide="stethoscope"></i> Recommended Next Steps:</span>
+                  <span class="advisory-title"><i data-lucide="stethoscope"></i> Recommended Second Opinion:</span>
                   <p class="advisory-content" id="advisory-text-content">
                     "Doctor, consider evaluating the 14mm circumscribed solitary nodule in the right upper lobe. In view of smoking history, suggest Fleischner-guided high-resolution chest CT."
                   </p>
+                </div>
+
+                <!-- Actionable Clinical Next Steps (What Doctor Should Do Next) -->
+                <div class="next-steps-card">
+                  <div class="next-steps-header">
+                    <i data-lucide="clipboard-list" class="text-accent"></i>
+                    <span>Actionable Clinical Next Steps:</span>
+                  </div>
+                  <div class="next-steps-list" id="actionable-steps-list">
+                    <!-- Populated dynamically via Gemma Agent -->
+                  </div>
                 </div>
 
                 <!-- Differentials List -->
@@ -216,6 +227,13 @@
                   <div class="diff-list" id="differentials-list">
                     <!-- Populated dynamically -->
                   </div>
+                </div>
+
+                <!-- Open Source AI Model Badges -->
+                <div class="model-attribution-strip">
+                  <span class="model-pill"><i data-lucide="cpu"></i> Gemma-2 Medical Agent</span>
+                  <span class="model-pill"><i data-lucide="eye"></i> DenseNet-121 + CAM</span>
+                  <span class="model-pill"><i data-lucide="file-code"></i> BioClinicalBERT</span>
                 </div>
               </div>
             </div>
