@@ -12,8 +12,7 @@ const BACKEND_API = 'http://localhost:8000/api';
 document.addEventListener('DOMContentLoaded', () => {
   initIcons();
   initRenderer();
-  initNavigation();
-  initCaseChips();
+  initCaseSelector();
   initViewControls();
   initModelSelector();
   initInteractiveEHR();
@@ -168,22 +167,19 @@ function initNavigation() {
   });
 }
 
-function initCaseChips() {
-  const container = document.getElementById('case-chips-list');
-  if (!container) return;
+function initCaseSelector() {
+  const selectEl = document.getElementById('patient-case-select');
+  if (!selectEl) return;
 
-  container.innerHTML = BENCHMARK_CASES.map((c, i) => `
-    <button class="case-chip ${i === currentCaseIndex ? 'active' : ''}" data-index="${i}">
-      <span>${c.title}</span>
-      <span class="badge-risk ${c.severity}">${c.severity.toUpperCase()}</span>
-    </button>
+  selectEl.innerHTML = BENCHMARK_CASES.map((c, i) => `
+    <option value="${i}" ${i === currentCaseIndex ? 'selected' : ''}>
+      ${c.title} (${c.severity.toUpperCase()})
+    </option>
   `).join('');
 
-  container.querySelectorAll('.case-chip').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const idx = parseInt(btn.dataset.index, 10);
-      loadCase(idx);
-    });
+  selectEl.addEventListener('change', (e) => {
+    const idx = parseInt(e.target.value, 10);
+    loadCase(idx);
   });
 }
 
@@ -202,7 +198,7 @@ function initModelSelector() {
       'o1': 'OpenAI o1 Reasoner',
       'gemma-2': 'Google Gemma-2',
       'densenet-121': 'DenseNet-121 + CAM',
-      'bioclinicalbert': 'BioClinicalBERT NLP'
+      'bioclinicalbert': 'BioClinicalBERT'
     };
 
     if (activeEngineTag) activeEngineTag.textContent = nameMap[currentSelectedModel] || currentSelectedModel;
@@ -217,29 +213,28 @@ async function loadCase(index) {
   const c = BENCHMARK_CASES[index];
   if (!c) return;
 
-  // Active state on chips
-  document.querySelectorAll('.case-chip').forEach((chip, i) => {
-    chip.classList.toggle('active', i === index);
-  });
+  // Sync dropdown
+  const selectEl = document.getElementById('patient-case-select');
+  if (selectEl && selectEl.value !== String(index)) {
+    selectEl.value = String(index);
+  }
 
   // 1. Vision
   renderer.setCase(c);
-  document.getElementById('peak-finding-text').textContent = c.vision.finding;
-  const sourceTag = document.getElementById('dataset-source-tag');
-  if (sourceTag && c.datasetSource) {
-    sourceTag.textContent = c.datasetSource;
-  }
+  const peakText = document.getElementById('peak-finding-text');
+  if (peakText) peakText.textContent = c.vision.finding;
+
+  // Info banner
+  const cohortTag = document.getElementById('info-cohort-source');
+  const catTag = document.getElementById('info-category-tag');
+  if (cohortTag && c.datasetSource) cohortTag.textContent = c.datasetSource;
+  if (catTag && c.category) catTag.textContent = c.category;
 
   // 2. Text (EHR)
   document.getElementById('pt-id').textContent = c.patient.id;
   document.getElementById('pt-age-gender').textContent = c.patient.ageGender;
   document.getElementById('pt-spo2').textContent = c.patient.spo2;
   document.getElementById('pt-wbc').textContent = c.patient.wbc;
-
-  // Metadata Box
-  document.getElementById('box-dataset-source').textContent = c.datasetSource;
-  document.getElementById('box-modality').textContent = c.vision.backbone.includes('AP') ? 'CXR AP Portable' : 'CXR PA Standard';
-  document.getElementById('box-category').textContent = c.category || 'Thoracic Pathology';
 
   // Highlighted tokens in notes
   const notesContainer = document.getElementById('clinical-notes-render');
@@ -321,12 +316,15 @@ function updateAIOutput(confidence, advisory, receiptVision, receiptText, caseOb
     calAnnotation.textContent = 'High multi-dataset corroboration (ECE < 0.019 verified).';
   }
 
-  document.getElementById('receipt-vision-detail').textContent = receiptVision;
-  document.getElementById('receipt-text-detail').textContent = receiptText;
+  const receiptVisEl = document.getElementById('receipt-vision-detail');
+  const receiptTxtEl = document.getElementById('receipt-text-detail');
+  if (receiptVisEl) receiptVisEl.textContent = receiptVision;
+  if (receiptTxtEl) receiptTxtEl.textContent = receiptText;
 
   // Clean doctor advisory
   const formattedAdvisory = advisory.startsWith('"') ? advisory : `"${advisory}"`;
-  document.getElementById('advisory-text-content').textContent = formattedAdvisory;
+  const advisoryEl = document.getElementById('advisory-text-content');
+  if (advisoryEl) advisoryEl.textContent = formattedAdvisory;
 
   // Render Actionable Next Steps
   const stepsContainer = document.getElementById('actionable-steps-list');

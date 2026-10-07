@@ -8,12 +8,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-nJkSISLN.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DxFms0_G.css">
+    <script type="module" crossorigin src="/assets/index-BxOm0nNE.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BL-eADRD.css">
   </head>
   <body class="light-theme">
     <div id="app">
-      <!-- Clean Top Navbar -->
+      <!-- Clean Modern Top Navbar -->
       <header class="app-header">
         <div class="header-left">
           <div class="brand-logo">
@@ -22,83 +22,72 @@
             </span>
             <div class="brand-text">
               <span class="brand-title">PULSE<span class="text-accent">-CV</span></span>
-              <span class="brand-subtitle">Multi-Model Medical Diagnostic Platform</span>
+              <span class="brand-subtitle">Multimodal Diagnostic Co-Pilot</span>
             </div>
           </div>
         </div>
 
-        <nav class="nav-tabs">
-          <button class="nav-tab active" data-tab="copilot">
-            <i data-lucide="stethoscope"></i> Diagnostic Co-Pilot
-          </button>
-          <button class="nav-tab" data-tab="datasets">
-            <i data-lucide="database"></i> 12 Benchmark Datasets
-          </button>
-          <button class="nav-tab" data-tab="models">
-            <i data-lucide="cpu"></i> Model Consensus Matrix
-          </button>
-        </nav>
+        <!-- Center Controls: Case Selector + Model Switcher -->
+        <div class="header-center">
+          <div class="selector-capsule">
+            <div class="capsule-item">
+              <i data-lucide="folder-git-2" class="capsule-icon"></i>
+              <label for="patient-case-select" class="sr-only">Case</label>
+              <select id="patient-case-select" class="clean-select">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+            <div class="capsule-divider"></div>
+            <div class="capsule-item">
+              <i data-lucide="sparkles" class="capsule-icon text-sparkle"></i>
+              <label for="ai-model-selector" class="sr-only">Model</label>
+              <select id="ai-model-selector" class="clean-select">
+                <option value="ensemble" selected>Ensemble (Multi-Model)</option>
+                <option value="gpt-4o">OpenAI GPT-4o Vision</option>
+                <option value="o1">OpenAI o1 Reasoner</option>
+                <option value="gemma-2">Google Gemma-2 Medical</option>
+                <option value="densenet-121">DenseNet-121 + CAM</option>
+                <option value="bioclinicalbert">BioClinicalBERT</option>
+              </select>
+            </div>
+          </div>
+        </div>
 
         <div class="header-right">
-          <!-- Active Model Switcher Dropdown -->
-          <div class="model-select-wrapper">
-            <label for="ai-model-selector" class="model-select-label">
-              <i data-lucide="sparkles" class="text-sparkle"></i> Model:
-            </label>
-            <select id="ai-model-selector" class="model-dropdown">
-              <option value="ensemble" selected>✨ Multi-Model Ensemble (Optimized Consensus)</option>
-              <option value="gpt-4o">⚡ OpenAI GPT-4o Vision Co-Pilot</option>
-              <option value="o1">🧠 OpenAI o1 Deep Clinical Reasoner</option>
-              <option value="gemma-2">🩺 Google Gemma-2 Medical Agent</option>
-              <option value="densenet-121">👁️ DenseNet-121 + Spatial CAM</option>
-              <option value="bioclinicalbert">📋 BioClinicalBERT Clinical NLP</option>
-            </select>
-          </div>
+          <label class="btn-ghost" for="image-upload-input" title="Upload Custom CXR">
+            <i data-lucide="upload"></i> <span>Upload</span>
+          </label>
+          <input type="file" id="image-upload-input" accept="image/*" class="sr-only" />
 
-          <!-- API Key Modal Trigger -->
-          <button id="open-api-key-btn" class="btn-api-key" title="Configure OpenAI API Key">
-            <i data-lucide="key"></i> <span id="api-key-status-text">OpenAI API</span>
+          <button id="open-api-key-btn" class="btn-ghost" title="Configure OpenAI API Key">
+            <i data-lucide="key"></i> <span id="api-key-status-text">API Key</span>
           </button>
 
           <button id="theme-toggle" class="btn-icon" title="Toggle Theme">
             <i data-lucide="moon"></i>
           </button>
-          <button id="export-report-btn" class="btn-summary-report">
-            <i data-lucide="file-text"></i> Summary Report
+          
+          <button id="export-report-btn" class="btn-primary-compact">
+            <i data-lucide="file-text"></i> <span>Export Report</span>
           </button>
         </div>
       </header>
 
       <!-- Main Viewport -->
       <main class="main-viewport">
-        <!-- ==================== TAB 1: CO-PILOT ==================== -->
+        <!-- Diagnostic Workspace -->
         <section id="tab-copilot" class="tab-pane active">
           
-          <!-- Top Patient Selection Toolbar -->
-          <div class="clean-toolbar card">
-            <div class="toolbar-top-row">
-              <div class="toolbar-label">
-                <i data-lucide="users"></i>
-                <span>Cohort (12 Benchmark Datasets):</span>
-              </div>
-              <div class="case-chips-wrapper" id="case-chips-list">
-                <!-- Populated dynamically via JS -->
-              </div>
+          <!-- Sleek Info Banner Strip -->
+          <div class="minimal-info-strip">
+            <div class="info-strip-left">
+              <span class="info-badge" id="info-cohort-source">National Lung Screening Trial</span>
+              <span class="info-badge outline" id="info-category-tag">Oncologic Surveillance</span>
             </div>
-            <div class="toolbar-bottom-row">
-              <label class="btn-upload-scan" for="image-upload-input" title="Upload Scan">
-                <i data-lucide="upload"></i> Upload Scan
-              </label>
-              <input type="file" id="image-upload-input" accept="image/*" class="sr-only" />
-              
-              <div class="dataset-source-indicator">
-                <i data-lucide="database" class="text-accent"></i>
-                <span>Trained Cohort: <strong id="dataset-source-tag">National Lung Screening Trial (NLST)</strong></span>
-                <span class="source-tag-divider">•</span>
-                <span>Active Model: <strong id="active-engine-tag" class="text-accent">Multi-Model Ensemble</strong></span>
-                <span class="source-tag-divider">•</span>
-                <span>ECE Error: <strong class="text-success">&lt; 0.019 (Calibrated)</strong></span>
-              </div>
+            <div class="info-strip-right">
+              <span class="info-meta">Active Engine: <strong id="active-engine-tag" class="text-accent">Multi-Model Ensemble</strong></span>
+              <span class="info-dot">•</span>
+              <span class="info-meta">Calibrated ECE: <strong class="text-success">&lt; 0.019</strong></span>
             </div>
           </div>
 
@@ -178,40 +167,24 @@
                 <!-- Doctor Notes with Highlighted Evidence -->
                 <div class="notes-wrapper">
                   <div class="notes-header-row">
-                    <label class="section-label">Doctor Notes (Key symptoms highlighted):</label>
-                    <div class="notes-actions">
-                      <button id="edit-doctor-notes-btn" class="btn-micro" title="Add / Edit Doctor's Note">
-                        <i data-lucide="edit-3"></i> <span>Ask / Enter Doctor's Note</span>
-                      </button>
-                    </div>
+                    <label class="section-label">Doctor Notes:</label>
+                    <button id="edit-doctor-notes-btn" class="btn-micro" title="Add / Edit Doctor's Note">
+                      <i data-lucide="edit-3"></i> <span>Edit Note</span>
+                    </button>
                   </div>
                   <div class="clinical-note-content" id="clinical-notes-render">
                     <!-- Populated dynamically -->
                   </div>
                 </div>
 
-                <!-- Quick Context Test Prompt -->
+                <!-- Context Simulation -->
                 <div class="interactive-test-row">
-                  <label class="section-label" for="custom-ehr-input">Quick Context Test / Simulation:</label>
+                  <label class="section-label" for="custom-ehr-input">Ask Question / Clinical Context:</label>
                   <div class="input-with-button">
-                    <input type="text" id="custom-ehr-input" value="Patient has acute fevers reaching 102.5F and purulent sputum" placeholder="Enter clinical context or question..." />
+                    <input type="text" id="custom-ehr-input" value="Patient presents with acute fevers and productive sputum" placeholder="Ask AI or simulate clinical context..." />
                     <button id="reanalyze-btn" class="btn-update-ai">
-                      <i data-lucide="refresh-cw"></i> Consult AI
+                      <i data-lucide="sparkles"></i> Consult AI
                     </button>
-                  </div>
-                </div>
-
-                <!-- Multi-Dataset Info Widget -->
-                <div class="cohort-meta-box">
-                  <div class="cohort-meta-header">
-                    <i data-lucide="layers" class="text-accent"></i>
-                    <span>Dataset Ground Truth Specs</span>
-                  </div>
-                  <div class="cohort-meta-grid">
-                    <div><span>Dataset:</span> <strong id="box-dataset-source">National Lung Screening Trial</strong></div>
-                    <div><span>Modality:</span> <strong id="box-modality">CXR Screening PA</strong></div>
-                    <div><span>Category:</span> <strong id="box-category">Oncologic Surveillance</strong></div>
-                    <div><span>Verification:</span> <strong class="text-success">Biopsy &amp; Panel Confirmed</strong></div>
                   </div>
                 </div>
               </div>
@@ -231,7 +204,7 @@
                 <!-- Calibrated Confidence Gauge -->
                 <div class="confidence-box">
                   <div class="conf-top">
-                    <span class="conf-title">OPTIMIZED CONFIDENCE</span>
+                    <span class="conf-title">DIAGNOSTIC CONFIDENCE</span>
                     <span class="conf-score" id="confidence-percentage">72%</span>
                   </div>
                   <div class="conf-progress-track">
@@ -242,27 +215,9 @@
                   </div>
                 </div>
 
-                <!-- Evidence Proof Receipts -->
-                <div class="receipts-container">
-                  <div class="receipt-row receipt-image">
-                    <span class="receipt-icon"><i data-lucide="map-pin"></i></span>
-                    <div class="receipt-details">
-                      <span class="receipt-title">IMAGE PROOF:</span>
-                      <p id="receipt-vision-detail">Centroid: X=210, Y=190, Radius=45px</p>
-                    </div>
-                  </div>
-                  <div class="receipt-row receipt-chart">
-                    <span class="receipt-icon"><i data-lucide="quote"></i></span>
-                    <div class="receipt-details">
-                      <span class="receipt-title">CHART PROOF:</span>
-                      <p id="receipt-text-detail">"Former 25 pack-year cigarette smoker, quit 4 years ago... No cough, hemoptysis, fevers."</p>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Physician Collegial Recommendation -->
+                <!-- Physician Recommendation -->
                 <div class="physician-advisory-box">
-                  <span class="advisory-title"><i data-lucide="stethoscope"></i> Recommended Second Opinion:</span>
+                  <span class="advisory-title"><i data-lucide="stethoscope"></i> Clinical Advisory:</span>
                   <p class="advisory-content" id="advisory-text-content">
                     "Doctor, consider evaluating the 14mm circumscribed solitary nodule in the right upper lobe. In view of smoking history, suggest Fleischner-guided high-resolution chest CT."
                   </p>
@@ -272,7 +227,7 @@
                 <div class="next-steps-card">
                   <div class="next-steps-header">
                     <i data-lucide="clipboard-list" class="text-accent"></i>
-                    <span>Actionable Clinical Next Steps:</span>
+                    <span>Recommended Next Steps:</span>
                   </div>
                   <div class="next-steps-list" id="actionable-steps-list">
                     <!-- Populated dynamically -->
@@ -281,7 +236,7 @@
 
                 <!-- Differentials List -->
                 <div class="diff-container">
-                  <span class="section-label">Top Differentials:</span>
+                  <span class="section-label">Differentials:</span>
                   <div class="diff-list" id="differentials-list">
                     <!-- Populated dynamically -->
                   </div>
@@ -300,90 +255,6 @@
 
           </div>
         </section>
-
-        <!-- ==================== TAB 2: DATASETS DIRECTORY ==================== -->
-        <section id="tab-datasets" class="tab-pane">
-          <div class="datasets-dashboard card">
-            <div class="dash-header">
-              <div class="dash-title-wrap">
-                <h2><i data-lucide="database" class="text-accent"></i> 12 Multi-Center Ingested Medical Datasets</h2>
-                <p>Cross-aligned clinical imaging cohorts integrated into the unified diagnostic training &amp; inference pipeline.</p>
-              </div>
-              <div class="dataset-stats-strip">
-                <div class="stat-bubble">
-                  <span class="stat-num">12</span>
-                  <span class="stat-lbl">Global Cohorts</span>
-                </div>
-                <div class="stat-bubble">
-                  <span class="stat-num">100%</span>
-                  <span class="stat-lbl">Paired EHR + CXR</span>
-                </div>
-                <div class="stat-bubble">
-                  <span class="stat-num">0.019</span>
-                  <span class="stat-lbl">Platt ECE Error</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="datasets-grid" id="datasets-grid-container">
-              <!-- Populated dynamically via JS -->
-            </div>
-          </div>
-        </section>
-
-        <!-- ==================== TAB 3: MODEL CONSENSUS MATRIX ==================== -->
-        <section id="tab-models" class="tab-pane">
-          <div class="models-dashboard card">
-            <div class="dash-header">
-              <div class="dash-title-wrap">
-                <h2><i data-lucide="cpu" class="text-accent"></i> Multi-Model Diagnostic Consensus Matrix</h2>
-                <p>Comparison across OpenAI GPT-4o, OpenAI o1, Google Gemma-2, DenseNet-121, and BioClinicalBERT for the active case.</p>
-              </div>
-              <div class="consensus-badge-wrap">
-                <span class="consensus-badge" id="consensus-summary-pill">Agreement: 96% (High Concordance)</span>
-              </div>
-            </div>
-
-            <!-- Model Comparison Cards Table -->
-            <div class="models-comparison-grid" id="models-matrix-container">
-              <!-- Populated dynamically via JS -->
-            </div>
-
-            <!-- Guardrails Auditor Box -->
-            <div class="guardrails-dashboard-card card">
-              <div class="card-head">
-                <div class="card-title">
-                  <i data-lucide="shield-check" class="text-success"></i>
-                  <span>Zero-Hallucination &amp; Precision Guardrails Auditor</span>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="guardrail-tests-row">
-                  <div class="test-col">
-                    <button id="test-hallucination-btn" class="btn-guardrail">
-                      <i data-lucide="alert-triangle"></i> Test Hallucination Rejection
-                    </button>
-                    <div id="hallucination-test-result" class="test-res-box hidden"></div>
-                  </div>
-                  <div class="test-col">
-                    <button id="test-degraded-scan-btn" class="btn-guardrail">
-                      <i data-lucide="image-off"></i> Test Degraded Image Penalty
-                    </button>
-                    <div id="degraded-scan-test-result" class="test-res-box hidden"></div>
-                  </div>
-                  <div class="test-col">
-                    <button id="test-linter-btn" class="btn-guardrail">
-                      <i data-lucide="check-circle-2"></i> Physician Collegial Framing
-                    </button>
-                    <div id="linter-test-result" class="test-res-box hidden"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </section>
-
       </main>
 
       <!-- OpenAI API Key Configuration Modal -->
