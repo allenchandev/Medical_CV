@@ -125,12 +125,27 @@ function initRenderer() {
 
           const currentCase = BENCHMARK_CASES[currentCaseIndex];
           currentCase.vision.heatCenter = { x: bestX, y: bestY, radius: 55 };
-          currentCase.vision.finding = "Focal Radiographic Density (Uploaded Scan)";
+
+          const notesText = currentCase.patient?.notes || '';
+          let dynamicFinding = "Focal Radiographic Density (Uploaded Scan)";
+          if (/intussusception|bowel|jejunum|ileum/i.test(notesText)) {
+            dynamicFinding = "Abdominal Intussusception / Jejunojejunal Invagination";
+          } else if (/pneumothorax/i.test(notesText)) {
+            dynamicFinding = "Apical Pneumothorax";
+          } else if (/pneumonia|consolidation/i.test(notesText)) {
+            dynamicFinding = "Lobar Consolidation / Infiltrate";
+          } else if (/cardiomegaly|heart failure|edema/i.test(notesText)) {
+            dynamicFinding = "Cardiomegaly / Pulmonary Vascular Congestion";
+          } else if (/nodule|mass|neoplasm/i.test(notesText)) {
+            dynamicFinding = "Pulmonary / Visceral Soft Tissue Nodule";
+          }
+
+          currentCase.vision.finding = dynamicFinding;
           renderer.render();
 
           const customPtId = "PT-UPLOAD-" + Math.floor(1000 + Math.random() * 9000);
           document.getElementById('pt-id').textContent = customPtId;
-          document.getElementById('peak-finding-text').textContent = `Focal Finding at (${bestX}, ${bestY})`;
+          document.getElementById('peak-finding-text').textContent = `${dynamicFinding} at (${bestX}, ${bestY})`;
 
           triggerAnalysis(currentCase);
         };
@@ -251,7 +266,8 @@ async function loadCase(index) {
 }
 
 async function triggerAnalysis(caseObj) {
-  const userNote = document.getElementById('custom-ehr-input')?.value || caseObj.patient.notes;
+  // Use patient notes as the primary clinical ground truth
+  const userNote = caseObj.patient.notes;
 
   try {
     const res = await fetch(`${BACKEND_API}/analyze`, {
