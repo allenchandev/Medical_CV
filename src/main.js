@@ -2,7 +2,7 @@ import { createIcons, icons } from 'lucide';
 import { BENCHMARK_CASES } from './casesData.js';
 import { MedicalImageRenderer } from './medicalCanvas.js';
 
-let currentCaseIndex = 0;
+let currentCaseIndex = 3;
 let renderer = null;
 const BACKEND_API = 'http://localhost:8000/api';
 
@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initExportModal();
   initThemeToggle();
 
-  // Load first sample case
-  loadCase(0);
+  // Load Solitary Pulmonary Nodule as default matching mockup
+  loadCase(3);
 });
 
 function initIcons() {
@@ -118,7 +118,7 @@ function initCaseChips() {
   if (!container) return;
 
   container.innerHTML = BENCHMARK_CASES.map((c, i) => `
-    <button class="case-chip ${i === 0 ? 'active' : ''}" data-index="${i}">
+    <button class="case-chip ${i === 3 ? 'active' : ''}" data-index="${i}">
       <span>${c.title}</span>
       <span class="badge-risk ${c.severity}">${c.severity.toUpperCase()}</span>
     </button>
