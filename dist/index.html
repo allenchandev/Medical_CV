@@ -3,18 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PULSE-CV | Multimodal Medical Image Intelligence Diagnostic Co-Pilot</title>
-    <meta name="description" content="AI diagnostic assistant functioning as a second doctor in the room with calibrated confidence, cross-modal evidence grounding, Grad-CAM heatmaps, and U-Net polygon segmentation." />
-    <!-- Fonts -->
+    <title>PULSE-CV | Multimodal Medical AI Co-Pilot</title>
+    <meta name="description" content="Evidence-based Multimodal Medical Image Intelligence assistant for chest radiography and clinical notes." />
+    <!-- Modern Clean Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-BmHOGeZc.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DIjzWrDg.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="/assets/index-CqUpIsrF.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-Dvyz1xIu.css">
   </head>
   <body class="dark-theme">
     <div id="app">
-      <!-- Navigation Header -->
+      <!-- Clean Top Navbar -->
       <header class="app-header">
         <div class="header-left">
           <div class="brand-logo">
@@ -26,24 +26,20 @@
               <span class="brand-subtitle">Multimodal Medical Intelligence</span>
             </div>
           </div>
-          <div class="system-status-badge">
-            <span class="status-indicator live"></span>
-            <span>CLINICAL CO-PILOT ACTIVE</span>
-          </div>
         </div>
 
         <nav class="nav-tabs">
-          <button class="nav-tab active" data-tab="interactive-copilot">
-            <i data-lucide="cpu"></i> Interactive Diagnostic Co-Pilot
+          <button class="nav-tab active" data-tab="copilot">
+            <i data-lucide="stethoscope"></i> Diagnostic Co-Pilot
           </button>
-          <button class="nav-tab" data-tab="architecture-explorer">
-            <i data-lucide="layers"></i> Architecture & Fusion
+          <button class="nav-tab" data-tab="architecture">
+            <i data-lucide="layers"></i> Architecture
           </button>
-          <button class="nav-tab" data-tab="guardrails-auditor">
-            <i data-lucide="shield-check"></i> Strict Guardrails & Ethics
+          <button class="nav-tab" data-tab="guardrails">
+            <i data-lucide="shield-check"></i> Safety Guardrails
           </button>
-          <button class="nav-tab" data-tab="roadmap-phases">
-            <i data-lucide="git-branch"></i> 3-Phase Build Roadmap
+          <button class="nav-tab" data-tab="roadmap">
+            <i data-lucide="git-branch"></i> 3-Phase Plan
           </button>
         </nav>
 
@@ -52,612 +48,369 @@
             <i data-lucide="sun"></i>
           </button>
           <button id="export-report-btn" class="btn-primary-outline">
-            <i data-lucide="file-down"></i> Export Clinical Note
+            <i data-lucide="file-text"></i> Summary Report
           </button>
         </div>
       </header>
 
-      <!-- Main Content Area -->
+      <!-- Main Clean Content Area -->
       <main class="main-viewport">
-        <!-- TAB 1: INTERACTIVE DIAGNOSTIC CO-PILOT -->
-        <section id="tab-interactive-copilot" class="tab-pane active">
-          <!-- Top Case Selector Bar -->
-          <div class="case-selection-bar">
-            <div class="selector-label">
-              <i data-lucide="folder-search"></i>
-              <span>PRESET BENCHMARK CASES:</span>
+        <!-- ==================== TAB 1: USER-FRIENDLY CO-PILOT ==================== -->
+        <section id="tab-copilot" class="tab-pane active">
+          
+          <!-- Case Switcher Bar (Quick & Intuitive) -->
+          <div class="clean-toolbar card">
+            <div class="toolbar-label">
+              <i data-lucide="user-check"></i>
+              <span>Select Sample Patient:</span>
             </div>
             <div class="case-chips-wrapper" id="case-chips-list">
-              <!-- Dynamically populated cases -->
+              <!-- Rendered via JS -->
             </div>
-            <div class="custom-load-actions">
-              <label class="btn-secondary file-upload-btn" for="image-upload-input">
-                <i data-lucide="upload-cloud"></i> Upload Scan
+            <div class="toolbar-actions">
+              <label class="btn-secondary file-upload-btn" for="image-upload-input" title="Upload custom X-ray">
+                <i data-lucide="upload"></i> Upload Scan
               </label>
               <input type="file" id="image-upload-input" accept="image/*" class="sr-only" />
-              <button id="reset-case-btn" class="btn-ghost" title="Reset Case">
-                <i data-lucide="rotate-ccw"></i> Reset
-              </button>
             </div>
           </div>
 
-          <!-- Dual-Modality Workspace Grid -->
-          <div class="diagnostic-grid">
-            <!-- Left Col: Modality 1 - Medical Vision & Localized Explainability -->
-            <div class="grid-panel vision-panel card">
-              <div class="panel-header">
-                <div class="panel-title">
+          <!-- Focused 3-Column Diagnostic Workspace -->
+          <div class="copilot-workspace">
+            
+            <!-- Column 1: The Image (Eyes) -->
+            <div class="card workspace-card vision-card">
+              <div class="card-head">
+                <div class="card-title">
                   <i data-lucide="eye" class="text-accent"></i>
-                  <span>MODALITY I: Vision Encoder (Visual Feature Maps)</span>
+                  <span>1. Medical Image (Vision)</span>
                 </div>
-                <div class="view-controls">
-                  <div class="seg-mode-selector" id="seg-mode-group">
-                    <button class="pill-btn active" data-mode="raw">Raw Scan</button>
-                    <button class="pill-btn" data-mode="gradcam">Grad-CAM Heatmap</button>
-                    <button class="pill-btn" data-mode="unet">U-Net Polygonal Mask</button>
-                    <button class="pill-btn" data-mode="split">Split Compare</button>
-                  </div>
+                <!-- Simple 3 Mode Switcher -->
+                <div class="seg-mode-selector" id="seg-mode-group">
+                  <button class="pill-btn" data-mode="raw">Raw Scan</button>
+                  <button class="pill-btn active" data-mode="gradcam">Heatmap</button>
+                  <button class="pill-btn" data-mode="unet">Outline</button>
                 </div>
               </div>
 
-              <div class="panel-body canvas-body">
+              <div class="card-body">
                 <div class="viewport-canvas-container" id="dicom-viewport">
                   <canvas id="medical-canvas" width="600" height="600"></canvas>
-                  <!-- Interactive Hover Inspection Tooltip -->
+                  
+                  <!-- Hover Tooltip -->
                   <div id="canvas-inspection-tag" class="inspection-tag hidden">
-                    <div class="tag-title">Finding Coordinate</div>
-                    <div class="tag-meta">x: <span id="tag-x">0</span>, y: <span id="tag-y">0</span> | Activation: <span id="tag-act">0.91</span></div>
+                    <span id="tag-act">Activation: 0.91</span>
                   </div>
-                  <!-- Overlay Controls Bar -->
+
+                  <!-- Discrete Canvas Controls -->
                   <div class="canvas-floating-controls">
                     <div class="slider-control">
-                      <label for="heatmap-opacity">Heatmap Opacity:</label>
+                      <span>Heatmap:</span>
                       <input type="range" id="heatmap-opacity" min="0" max="100" value="70">
-                      <span id="opacity-val">70%</span>
                     </div>
                     <div class="zoom-pan-indicator">
-                      <button id="zoom-in" class="mini-btn"><i data-lucide="zoom-in"></i></button>
-                      <button id="zoom-out" class="mini-btn"><i data-lucide="zoom-out"></i></button>
-                      <button id="zoom-reset" class="mini-btn"><i data-lucide="maximize"></i></button>
+                      <button id="zoom-in" class="mini-btn" title="Zoom In"><i data-lucide="zoom-in"></i></button>
+                      <button id="zoom-out" class="mini-btn" title="Zoom Out"><i data-lucide="zoom-out"></i></button>
+                      <button id="zoom-reset" class="mini-btn" title="Reset View"><i data-lucide="maximize"></i></button>
                     </div>
                   </div>
                 </div>
 
-                <!-- Vision Metrics Bar -->
-                <div class="vision-metrics-row">
-                  <div class="metric-pill">
-                    <span class="m-label">Encoder Backbone:</span>
-                    <span class="m-val" id="model-backbone">DenseNet-121 + ViT-B/16</span>
-                  </div>
-                  <div class="metric-pill">
-                    <span class="m-label">Resolution / Spatial:</span>
-                    <span class="m-val">512×512 (7×7 Receptive Field)</span>
-                  </div>
-                  <div class="metric-pill">
-                    <span class="m-label">Peak Visual Activation:</span>
-                    <span class="m-val highlight" id="peak-activation">0.89 (RLL)</span>
-                  </div>
+                <div class="quick-stat-bar">
+                  <span class="stat-tag"><i data-lucide="crosshair"></i> Finding: <strong id="peak-finding-text">Right Lower Lobe Opacity</strong></span>
                 </div>
               </div>
             </div>
 
-            <!-- Middle Col: Modality 2 - Patient EHR & Clinical NLP -->
-            <div class="grid-panel ehr-panel card">
-              <div class="panel-header">
-                <div class="panel-title">
+            <!-- Column 2: The Patient Story (Reader) -->
+            <div class="card workspace-card ehr-card">
+              <div class="card-head">
+                <div class="card-title">
                   <i data-lucide="file-text" class="text-info"></i>
-                  <span>MODALITY II: Text Encoder (ClinicalBERT / EHR Context)</span>
+                  <span>2. Clinical Chart (Reader)</span>
                 </div>
-                <div class="badge-tag" id="nlp-model-badge">BioClinicalBERT-Base</div>
+                <span class="patient-id-badge" id="pt-id">PT-9482</span>
               </div>
 
-              <div class="panel-body ehr-body">
-                <!-- Patient Demographics & Vitals -->
-                <div class="demographics-strip">
-                  <div class="demo-item">
-                    <span class="demo-k">Patient ID:</span>
-                    <span class="demo-v" id="pt-id">PT-9482-CXR</span>
+              <div class="card-body">
+                <!-- Essential Demographics Only -->
+                <div class="vitals-row">
+                  <div class="vital-item">
+                    <span class="v-label">Patient:</span>
+                    <span class="v-val" id="pt-age-gender">64yo Male</span>
                   </div>
-                  <div class="demo-item">
-                    <span class="demo-k">Age/Gender:</span>
-                    <span class="demo-v" id="pt-age-gender">64 yo Male</span>
+                  <div class="vital-item">
+                    <span class="v-label">SpO2:</span>
+                    <span class="v-val" id="pt-spo2">91%</span>
                   </div>
-                  <div class="demo-item">
-                    <span class="demo-k">Pulse Ox (SpO2):</span>
-                    <span class="demo-v" id="pt-spo2">91% (Room Air)</span>
-                  </div>
-                  <div class="demo-item">
-                    <span class="demo-k">WBC Count:</span>
-                    <span class="demo-v" id="pt-wbc">14.8 x10³/µL (Elevated)</span>
+                  <div class="vital-item">
+                    <span class="v-label">WBC:</span>
+                    <span class="v-val" id="pt-wbc">14.8k</span>
                   </div>
                 </div>
 
-                <!-- Clinical Text with Interactive Cross-Referenced Highlighting -->
-                <div class="ehr-text-container">
-                  <div class="sub-header">
-                    <span>Clinical Chart & Physician Notes (Click highlighted token to inspect evidence link):</span>
-                  </div>
+                <!-- Clean Note with Highlighted Evidence -->
+                <div class="notes-wrapper">
+                  <label class="section-label">Doctor Notes (Key symptoms highlighted):</label>
                   <div class="clinical-note-content" id="clinical-notes-render">
-                    <!-- Populated dynamically with grounded token spans -->
+                    <!-- Populated dynamically -->
                   </div>
-                  <div class="editable-ehr-container">
-                    <label for="custom-ehr-input" class="sub-header">
-                      <span>Live EHR Simulation Prompt:</span>
-                    </label>
-                    <textarea id="custom-ehr-input" rows="3" placeholder="Modify symptoms or age to see how cross-modal fusion re-evaluates probabilities..."></textarea>
+                </div>
+
+                <!-- Quick Interaction Test -->
+                <div class="interactive-test-row">
+                  <label class="section-label" for="custom-ehr-input">Quick Context Test:</label>
+                  <div class="input-with-button">
+                    <input type="text" id="custom-ehr-input" placeholder="e.g. Try typing: patient is young and asymptomatic" />
                     <button id="reanalyze-btn" class="btn-primary">
-                      <i data-lucide="play"></i> Run Dual-Modal Cross-Attention
+                      <i data-lucide="refresh-cw"></i> Update AI
                     </button>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Right Col: The Multimodal Fusion Brain & Physician Co-Pilot Output -->
-            <div class="grid-panel brain-panel card">
-              <div class="panel-header">
-                <div class="panel-title">
-                  <i data-lucide="brain-circuit" class="text-warning"></i>
-                  <span>Multimodal Fusion & Physician Advisory</span>
+            <!-- Column 3: The AI Assistant Output (Brain) -->
+            <div class="card workspace-card copilot-card highlight-border">
+              <div class="card-head">
+                <div class="card-title">
+                  <i data-lucide="sparkles" class="text-warning"></i>
+                  <span>3. AI Second Opinion</span>
                 </div>
-                <div class="rule-indicator-tag" title="Strict Physician-to-Physician Framing Enforced">
-                  <i data-lucide="check-check"></i> Non-Autonomous Helper Mode
-                </div>
+                <div class="helper-pill">Physician Co-Pilot</div>
               </div>
 
-              <div class="panel-body copilot-body">
-                <!-- Calibrated Confidence Gauge -->
-                <div class="calibration-section">
-                  <div class="cal-header">
-                    <span class="cal-title">CALIBRATED CLINICAL CONFIDENCE</span>
-                    <span class="cal-score" id="confidence-percentage">78%</span>
+              <div class="card-body">
+                <!-- Calibrated Confidence Widget -->
+                <div class="confidence-box">
+                  <div class="conf-top">
+                    <span class="conf-title">Confidence</span>
+                    <span class="conf-score" id="confidence-percentage">78%</span>
                   </div>
-                  <div class="cal-meter-track">
-                    <div class="cal-meter-bar" id="confidence-bar" style="width: 78%;"></div>
+                  <div class="conf-progress-track">
+                    <div class="conf-progress-fill" id="confidence-bar" style="width: 78%;"></div>
                   </div>
-                  <div class="cal-annotation" id="cal-annotation-text">
-                    <i data-lucide="info"></i>
-                    <span>Reliability Index: <strong>HIGH CORROBORATION</strong> (Image clarity index: 0.94, Text concordance: 0.88, Expected Calibration Error &lt; 0.03).</span>
+                  <div class="conf-subtext" id="cal-annotation-text">
+                    High corroboration between image &amp; chart symptoms.
                   </div>
                 </div>
 
-                <!-- Multimodal Fusion Attention Dial -->
-                <div class="cross-modal-weight-box">
-                  <div class="weight-label">Cross-Attention Modality Weighting:</div>
-                  <div class="weight-bars">
-                    <div class="w-item">
-                      <span>Vision Weight (Feature Map):</span>
-                      <div class="w-bar"><div id="vision-weight-fill" style="width: 58%">58%</div></div>
-                    </div>
-                    <div class="w-item">
-                      <span>Text Weight (Clinical History):</span>
-                      <div class="w-bar"><div id="text-weight-fill" style="width: 42%">42%</div></div>
+                <!-- Grounded Receipts (Proof) -->
+                <div class="receipts-container">
+                  <div class="receipt-row">
+                    <span class="receipt-icon"><i data-lucide="map-pin"></i></span>
+                    <div class="receipt-details">
+                      <span class="receipt-title">Image Proof:</span>
+                      <p id="receipt-vision-detail">Right Lower Lobe Consolidation</p>
                     </div>
                   </div>
-                </div>
-
-                <!-- Zero-Hallucination Evidence Receipts (Grounding Box) -->
-                <div class="evidence-receipts-card">
-                  <div class="evidence-header">
-                    <i data-lucide="badge-percent"></i>
-                    <span>EVIDENCE RECEIPTS (Zero-Hallucination Proof)</span>
-                  </div>
-                  <div class="receipt-item vision-receipt">
-                    <div class="r-badge"><i data-lucide="crosshair"></i> Spatial Bounding Box / CAM</div>
-                    <div class="r-content" id="receipt-vision-detail">Right Lower Lobe Consolidation (Centroid: X: 348, Y: 412, Area: 18.4% lung field).</div>
-                  </div>
-                  <div class="receipt-item text-receipt">
-                    <div class="r-badge"><i data-lucide="quote"></i> Clinical Text Quote</div>
-                    <div class="r-content" id="receipt-text-detail">"Productive cough with purulent sputum, tactile fevers (102.1F) for 4 days."</div>
+                  <div class="receipt-row">
+                    <span class="receipt-icon"><i data-lucide="quote"></i></span>
+                    <div class="receipt-details">
+                      <span class="receipt-title">Chart Proof:</span>
+                      <p id="receipt-text-detail">"Productive cough with purulent sputum, fevers 102.1°F"</p>
+                    </div>
                   </div>
                 </div>
 
-                <!-- Physician-to-Physician Advisory Output -->
-                <div class="advisory-output-card">
-                  <div class="advisory-header">
-                    <i data-lucide="stethoscope"></i>
-                    <span>Physician-to-Physician Recommendation</span>
-                  </div>
-                  <div class="advisory-text" id="advisory-text-content">
-                    "Consider evaluating the right lower lobe for dense bacterial consolidation/pneumonia in correlation with reported 4-day febrile illness, elevated WBC count (14.8k), and hypoxia (91%). Recommend sputum culture and empiric antibiotic coverage per institutional CAP protocol."
-                  </div>
+                <!-- Collegial Physician Recommendation -->
+                <div class="physician-advisory-box">
+                  <span class="advisory-title"><i data-lucide="stethoscope"></i> Recommended Next Steps:</span>
+                  <p class="advisory-content" id="advisory-text-content">
+                    "Consider evaluating the right lower lobe for bacterial consolidation/pneumonia. Recommend sputum culture and empiric antibiotic coverage."
+                  </p>
                 </div>
 
-                <!-- Differential Diagnostics Ranking -->
-                <div class="differentials-card">
-                  <div class="diff-header">
-                    <span>DIFFERENTIAL DIAGNOSES WITH CALIBRATED RISK:</span>
-                  </div>
+                <!-- Clean Differential List -->
+                <div class="diff-container">
+                  <span class="section-label">Top Differentials:</span>
                   <div class="diff-list" id="differentials-list">
                     <!-- Populated dynamically -->
                   </div>
                 </div>
               </div>
             </div>
+
           </div>
         </section>
 
-        <!-- TAB 2: ARCHITECTURE & CROSS-MODAL FUSION EXPLORER -->
-        <section id="tab-architecture-explorer" class="tab-pane">
-          <div class="content-header-banner">
-            <h2>Deep Architecture: Dual-Encoder Cross-Attention Framework</h2>
-            <p>Processing vision and clinical text into a shared unified latent space to eliminate unimodal bias.</p>
+        <!-- ==================== TAB 2: ARCHITECTURE (CLEAR & VISUAL) ==================== -->
+        <section id="tab-architecture" class="tab-pane">
+          <div class="clean-section-header">
+            <h2>How the Multimodal System Works</h2>
+            <p>Combining vision and clinical text into one shared understanding.</p>
           </div>
 
-          <div class="arch-visual-flow card">
-            <div class="arch-flow-grid">
-              <!-- Node 1: Vision Stream -->
-              <div class="flow-node vision-stream">
-                <div class="node-icon"><i data-lucide="image"></i></div>
-                <div class="node-title">Vision Encoder ("The Eyes")</div>
-                <div class="node-specs">
-                  <ul>
-                    <li><strong>Backbone:</strong> DenseNet-121 / ViT-B/16</li>
-                    <li><strong>Pre-training:</strong> RadImageNet / CheXpert (100k+ CXR)</li>
-                    <li><strong>Spatial Tensor:</strong> (B, 1024, 16, 16)</li>
-                    <li><strong>Output:</strong> Multi-scale visual feature maps preserving spatial coordinate awareness.</li>
-                  </ul>
-                </div>
-                <div class="node-pill">LayerCam / GradCAM hook active</div>
-              </div>
-
-              <!-- Connecting Node -->
-              <div class="flow-connector">
-                <i data-lucide="arrow-right"></i>
-                <span>Visual Tokens $V \in \mathbb{R}^{N \times d}$</span>
-              </div>
-
-              <!-- Node 2: Fusion Core -->
-              <div class="flow-node fusion-core">
-                <div class="node-icon highlight-node"><i data-lucide="network"></i></div>
-                <div class="node-title">Multimodal Fusion ("The Brain")</div>
-                <div class="node-specs">
-                  <ul>
-                    <li><strong>Cross-Attention Transformer:</strong> $\text{Softmax}(\frac{Q_T K_V^T}{\sqrt{d}}) V_V$</li>
-                    <li><strong>Mutual Gating:</strong> Dynamic weight balancing between ambiguous images vs rich EHR.</li>
-                    <li><strong>Shared Embedding:</strong> Project into 768-dim joint clinical latent space.</li>
-                    <li><strong>Evidence Aligner:</strong> Cross-attention token attribution.</li>
-                  </ul>
-                </div>
-                <div class="node-pill highlight">Joint Latent Space</div>
-              </div>
-
-              <!-- Connecting Node -->
-              <div class="flow-connector">
-                <i data-lucide="arrow-left"></i>
-                <span>Clinical Tokens $T \in \mathbb{R}^{M \times d}$</span>
-              </div>
-
-              <!-- Node 3: Text Stream -->
-              <div class="flow-node text-stream">
-                <div class="node-icon"><i data-lucide="file-code-2"></i></div>
-                <div class="node-title">Text Encoder ("The Reader")</div>
-                <div class="node-specs">
-                  <ul>
-                    <li><strong>Backbone:</strong> ClinicalBERT / BioLinkBERT</li>
-                    <li><strong>Vocabulary:</strong> PubMed & MIMIC-III Clinical NLP</li>
-                    <li><strong>Context Window:</strong> 512 subword tokens</li>
-                    <li><strong>Output:</strong> Semantic entity & negation-aware representations (e.g. "no fever" vs "fever").</li>
-                  </ul>
-                </div>
-                <div class="node-pill">Negation & Temporal Parser</div>
-              </div>
+          <div class="arch-3step-grid">
+            <div class="arch-step-card card">
+              <div class="step-num">Step 1</div>
+              <div class="step-icon"><i data-lucide="eye"></i></div>
+              <h3>Vision Encoder ("The Eyes")</h3>
+              <p>Extracts localized feature maps using DenseNet or Vision Transformers. It pinpoints <strong>where</strong> textures and shadows sit on the scan.</p>
+              <div class="step-badge">Visual Feature Map</div>
             </div>
 
-            <!-- Downstream Execution Units -->
-            <div class="arch-downstream-banner">
-              <div class="downstream-card">
-                <h4>1. Calibrated Classifier Head</h4>
-                <p>Temperature Scaling ($T$) to match softmax probability directly to empirical clinical truth.</p>
-              </div>
-              <div class="downstream-card">
-                <h4>2. Spatial CAM & Segmentation Head</h4>
-                <p>U-Net style skip-connections reproducing exact pixel boundaries of pathological lesions.</p>
-              </div>
-              <div class="downstream-card">
-                <h4>3. Evidence Receipt Generator</h4>
-                <p>Extracts bidirectional cross-attention matrices: pins sentence spans directly to image pixel bounding boxes.</p>
-              </div>
+            <div class="arch-step-card card">
+              <div class="step-num">Step 2</div>
+              <div class="step-icon"><i data-lucide="file-text"></i></div>
+              <h3>Text Encoder ("The Reader")</h3>
+              <p>ClinicalBERT processes patient notes, fever records, and symptoms to understand the clinical context and history.</p>
+              <div class="step-badge">Clinical Context</div>
+            </div>
+
+            <div class="arch-step-card card highlight-step">
+              <div class="step-num">Step 3</div>
+              <div class="step-icon"><i data-lucide="brain"></i></div>
+              <h3>Multimodal Fusion ("The Brain")</h3>
+              <p>Cross-attention combines both signals: if the text says "cough &amp; fever" and the scan shows an opacity, it correlates them to raise certainty.</p>
+              <div class="step-badge highlight">Cross-Attention Fusion</div>
             </div>
           </div>
 
-          <!-- Mathematical Formulation & Interactive Formula Playground -->
-          <div class="math-architecture-grid">
-            <div class="math-card card">
-              <h3><i data-lucide="calculator"></i> Mathematical Grounding: Cross-Attention Fusion</h3>
-              <div class="formula-block">
-                $$\mathbf{Z}_{fused} = \text{LayerNorm}(\mathbf{H}_{vision} + \text{MultiHeadAttn}(Q = \mathbf{H}_{text}\mathbf{W}_Q, K = \mathbf{H}_{vis}\mathbf{W}_K, V = \mathbf{H}_{vis}\mathbf{W}_V))$$
-              </div>
-              <p>When patient text mentions focal symptoms (e.g. <em>"right hemithorax pleuritic pain"</em>), the queries attend selectively to feature patches in the corresponding anatomical quadrant, boosting spatial sensitivity even on subtle, sub-radiological opacities.</p>
+          <!-- Code Snippet -->
+          <div class="code-wrapper card">
+            <div class="code-top">
+              <span><i data-lucide="code"></i> Core Fusion Pipeline (PyTorch)</span>
+              <button class="mini-btn" id="copy-code-btn"><i data-lucide="copy"></i> Copy</button>
+            </div>
+            <pre class="clean-code"><code># 1. Vision & Text feature projection
+vis_tokens = vision_encoder(images)       # [Batch, 256, 512]
+txt_tokens = text_encoder(patient_notes)  # [Batch, SeqLen, 512]
+
+# 2. Cross-Attention: Clinical text queries image features
+fused_tokens, attn_weights = cross_attention(
+    query=txt_tokens, key=vis_tokens, value=vis_tokens
+)
+
+# 3. Calibrated output with receipts
+probabilities = torch.sigmoid(classifier(fused_tokens.mean(dim=1)) / temperature)</code></pre>
+          </div>
+        </section>
+
+        <!-- ==================== TAB 3: SAFETY GUARDRAILS ==================== -->
+        <section id="tab-guardrails" class="tab-pane">
+          <div class="clean-section-header">
+            <h2>Strict Clinical Rules &amp; Guardrails</h2>
+            <p>Built for medical safety — zero hallucinations, honest confidence, and assistant-only role.</p>
+          </div>
+
+          <div class="guardrails-clean-grid">
+            <!-- Rule 1 -->
+            <div class="card guardrail-simple-card">
+              <div class="rule-icon success"><i data-lucide="shield-check"></i></div>
+              <h3>1. Zero Hallucinations</h3>
+              <p class="rule-summary">Every claim must have a proof receipt. If a finding cannot be traced to the image (coordinates) or the text (direct quote), it is discarded.</p>
+              <button class="btn-secondary-sm" id="test-hallucination-btn">
+                <i data-lucide="play"></i> Test Hallucination Check
+              </button>
+              <div id="hallucination-test-result" class="test-result-box hidden"></div>
             </div>
 
-            <div class="math-card card">
-              <h3><i data-lucide="scale"></i> Calibration Formula: Platt Scaling & ECE</h3>
-              <div class="formula-block">
-                $$\hat{p}_i = \sigma\left(\frac{z_i}{T}\right), \quad \text{ECE} = \sum_{m=1}^M \frac{|B_m|}{N} \big|\text{acc}(B_m) - \text{conf}(B_m)\big|$$
-              </div>
-              <p>A score of 78% means exactly 78 out of 100 historical scans with this signature were confirmed positive by biopsy/CT. Overconfidence on degraded scans is strictly penalized via negative log likelihood temperature penalties.</p>
+            <!-- Rule 2 -->
+            <div class="card guardrail-simple-card">
+              <div class="rule-icon warning"><i data-lucide="gauge"></i></div>
+              <h3>2. Calibrated Confidence</h3>
+              <p class="rule-summary">No dangerous 100% confidence on poor scans. When images are blurry or symptoms ambiguous, the AI honestly lowers its score.</p>
+              <button class="btn-secondary-sm" id="test-degraded-scan-btn">
+                <i data-lucide="alert-triangle"></i> Simulate Blurry Scan
+              </button>
+              <div id="degraded-scan-test-result" class="test-result-box hidden"></div>
+            </div>
+
+            <!-- Rule 3 -->
+            <div class="card guardrail-simple-card">
+              <div class="rule-icon info"><i data-lucide="user-check"></i></div>
+              <h3>3. Second Doctor, Not Replacement</h3>
+              <p class="rule-summary">The AI acts strictly as an assistant. It uses physician-to-physician phrasing: <em>"Consider evaluating X based on Y"</em> rather than blunt declarations.</p>
+              <button class="btn-secondary-sm" id="test-linter-btn">
+                <i data-lucide="check"></i> Test Language Filter
+              </button>
+              <div id="linter-test-result" class="test-result-box hidden"></div>
             </div>
           </div>
         </section>
 
-        <!-- TAB 3: STRICT GUARDRAILS & ETHICS AUDITOR -->
-        <section id="tab-guardrails-auditor" class="tab-pane">
-          <div class="content-header-banner">
-            <h2>Strict Clinical Guardrails & Zero-Hallucination Framework</h2>
-            <p>Medical AI cannot operate like generic chatbots. Review our rigorous safety checks and verification tests.</p>
+        <!-- ==================== TAB 4: 3-PHASE PLAN ==================== -->
+        <section id="tab-roadmap" class="tab-pane">
+          <div class="clean-section-header">
+            <h2>Step-by-Step Implementation Sequence</h2>
+            <p>Logical build progression designed for hackathon milestones.</p>
           </div>
 
-          <div class="guardrails-dashboard-grid">
-            <!-- Rule 1: Zero Hallucination -->
-            <div class="guardrail-card card">
-              <div class="guardrail-badge pass">
-                <i data-lucide="shield-check"></i> MANDATORY GUARDRAIL 1
-              </div>
-              <h3>Zero Hallucinations (Evidence-Based Only)</h3>
-              <p class="guardrail-desc">
-                In standard chat models, the AI might fabricate a diagnosis without proof. Under PULSE-CV, <strong>every claim must have a receipt</strong>.
-              </p>
-              <div class="rule-checklist">
-                <div class="check-item verified">
-                  <i data-lucide="check"></i>
-                  <span><strong>Visual Receipt:</strong> Precise bounding box coordinates or CAM activation map (x, y, radius) required for every anatomical finding.</span>
-                </div>
-                <div class="check-item verified">
-                  <i data-lucide="check"></i>
-                  <span><strong>Textual Receipt:</strong> Verbatim sentence quote from clinical notes with character start/end index.</span>
-                </div>
-                <div class="check-item verified">
-                  <i data-lucide="check"></i>
-                  <span><strong>Rejection Filter:</strong> If a candidate finding cannot be cross-referenced to either modality, it is automatically discarded as hallucination.</span>
-                </div>
-              </div>
-              <div class="live-test-box">
-                <button class="btn-secondary-sm" id="test-hallucination-btn">
-                  <i data-lucide="flame"></i> Simulate Hallucination Injection & Verification Test
-                </button>
-                <div id="hallucination-test-result" class="test-result-box hidden"></div>
-              </div>
-            </div>
-
-            <!-- Rule 2: Calibrated Confidence -->
-            <div class="guardrail-card card">
-              <div class="guardrail-badge pass">
-                <i data-lucide="gauge"></i> MANDATORY GUARDRAIL 2
-              </div>
-              <h3>Calibrated Confidence & Uncertainty Quantification</h3>
-              <p class="guardrail-desc">
-                A model that claims 99% confidence on an overexposed, motion-blurred scan is dangerous. The system assesses scan quality and conveys uncertainty.
-              </p>
-              <div class="rule-checklist">
-                <div class="check-item verified">
-                  <i data-lucide="check"></i>
-                  <span><strong>Image Quality Assessment (IQA):</strong> Blurriness, contrast, rotation, and clipping are graded before inference.</span>
-                </div>
-                <div class="check-item verified">
-                  <i data-lucide="check"></i>
-                  <span><strong>Monte Carlo Dropout / Ensemble Variance:</strong> Epistemic uncertainty measured across 10 forward passes.</span>
-                </div>
-                <div class="check-item verified">
-                  <i data-lucide="check"></i>
-                  <span><strong>Degraded Scan Downgrade:</strong> Artificially noisy images automatically reduce maximum confidence and trigger physician review.</span>
-                </div>
-              </div>
-              <div class="live-test-box">
-                <button class="btn-secondary-sm" id="test-degraded-scan-btn">
-                  <i data-lucide="alert-triangle"></i> Simulate Degraded Scan (Inject Artifacts)
-                </button>
-                <div id="degraded-scan-test-result" class="test-result-box hidden"></div>
-              </div>
-            </div>
-
-            <!-- Rule 3: Physician-to-Physician Framing -->
-            <div class="guardrail-card card">
-              <div class="guardrail-badge pass">
-                <i data-lucide="user-check"></i> MANDATORY GUARDRAIL 3
-              </div>
-              <h3>Role Enforcement (Physician Co-Pilot, Not Replacement)</h3>
-              <p class="guardrail-desc">
-                The AI never issues final diagnostic verdicts like "The patient has COVID-19." It adopts collegial, collaborative clinical phrasing.
-              </p>
-              <div class="rule-checklist">
-                <div class="check-item verified">
-                  <i data-lucide="check"></i>
-                  <span><strong>Language Linter:</strong> Rejects deterministic claims ("Patient suffers from...") in favor of "Consider evaluating right base for...".</span>
-                </div>
-                <div class="check-item verified">
-                  <i data-lucide="check"></i>
-                  <span><strong>Actionable Next Steps:</strong> Recommends confirmatory imaging (CT thorax), lab panels (procalcitonin), or clinical follow-ups.</span>
-                </div>
-                <div class="check-item verified">
-                  <i data-lucide="check"></i>
-                  <span><strong>FDA SaMD Compliance Guard:</strong> Complies with Software as a Medical Device Clinical Decision Support guidance (21 U.S.C. 360j(o)(1)(E)).</span>
-                </div>
-              </div>
-              <div class="live-test-box">
-                <button class="btn-secondary-sm" id="test-linter-btn">
-                  <i data-lucide="terminal"></i> Audit Lexical Tone Linter
-                </button>
-                <div id="linter-test-result" class="test-result-box hidden"></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- TAB 4: STEP-BY-STEP 3-PHASE IMPLEMENTATION PLAN -->
-        <section id="tab-roadmap-phases" class="tab-pane">
-          <div class="content-header-banner">
-            <h2>Hackathon Step-by-Step Implementation Strategy</h2>
-            <p>From single-modality baseline to surgical-grade U-Net multimodal segmentation. Structured for judging milestones.</p>
-          </div>
-
-          <div class="phases-timeline-container">
+          <div class="roadmap-steps-clean">
             <!-- Phase 1 -->
-            <div class="phase-card card">
-              <div class="phase-milestone-marker">PHASE 1</div>
-              <div class="phase-badge baseline">The Baseline</div>
-              <h3 class="phase-title">Single Modality & Localization</h3>
-              <div class="phase-content">
-                <div class="phase-section">
-                  <span class="p-sub"><i data-lucide="database"></i> Datasets:</span>
-                  <p>MIMIC-CXR, NIH ChestX-ray14, CheXpert, Kaggle RSNA Pneumonia Challenge (30,000+ DICOM images).</p>
-                </div>
-                <div class="phase-section">
-                  <span class="p-sub"><i data-lucide="cpu"></i> Task:</span>
-                  <p>Train standard deep CNN / ViT classifier for 1 targeted abnormality (e.g. Pneumonia or Cardiomegaly).</p>
-                </div>
-                <div class="phase-section">
-                  <span class="p-sub"><i data-lucide="eye"></i> Output & Explainability:</span>
-                  <p>Implement Grad-CAM to generate activation heatmaps over the thoracic cavity. Proves to judges that the network attends to lung parenchyma rather than hospital ECG leads or edge artifacts.</p>
-                </div>
-                <div class="phase-deliverables">
-                  <span class="badge-tag">AUROC > 0.88</span>
-                  <span class="badge-tag">Grad-CAM Overlay</span>
-                  <span class="badge-tag">False Positive Filter</span>
+            <div class="card phase-item">
+              <div class="phase-left">
+                <span class="phase-step-badge">Phase 1</span>
+                <span class="phase-role">The Baseline</span>
+              </div>
+              <div class="phase-main">
+                <h3>Single Modality &amp; Localization</h3>
+                <p>Train a standard classifier on <strong>MIMIC-CXR</strong> or <strong>CheXpert</strong>. Use <strong>Grad-CAM</strong> to draw a heatmap, proving the AI looks at the lungs rather than background equipment.</p>
+                <div class="phase-tags">
+                  <span>MIMIC-CXR</span>
+                  <span>Single-Class Classifier</span>
+                  <span>Grad-CAM Heatmap</span>
                 </div>
               </div>
             </div>
 
             <!-- Phase 2 -->
-            <div class="phase-card card highlight-phase">
-              <div class="phase-milestone-marker">PHASE 2</div>
-              <div class="phase-badge core">The Core Challenge</div>
-              <h3 class="phase-title">Multimodal Integration & Cross-Attention</h3>
-              <div class="phase-content">
-                <div class="phase-section">
-                  <span class="p-sub"><i data-lucide="database"></i> Datasets:</span>
-                  <p>MIMIC-CXR with paired radiology reports (Findings & Impression sections) and emergency admission vitals.</p>
-                </div>
-                <div class="phase-section">
-                  <span class="p-sub"><i data-lucide="cpu"></i> Task:</span>
-                  <p>Dual-Encoder model (DenseNet + ClinicalBERT) with cross-attention fusion layer. System dynamically raises or lowers probability based on patient clinical history.</p>
-                </div>
-                <div class="phase-section">
-                  <span class="p-sub"><i data-lucide="eye"></i> Output & Explainability:</span>
-                  <p>Dual-attributed explanations: Cites both the highest-intensity region on the X-ray heatmap AND exact quotes from clinical notes.</p>
-                </div>
-                <div class="phase-deliverables">
-                  <span class="badge-tag">Dual-Modal Latent Fusion</span>
-                  <span class="badge-tag">Bi-directional Receipts</span>
-                  <span class="badge-tag">Temperature Calibration</span>
+            <div class="card phase-item highlight-border">
+              <div class="phase-left">
+                <span class="phase-step-badge highlight">Phase 2</span>
+                <span class="phase-role">The Core Challenge</span>
+              </div>
+              <div class="phase-main">
+                <h3>Multimodal Integration</h3>
+                <p>Feed both image and clinical text into a dual-encoder model. The system adjusts predictions based on notes (e.g. downgrading visual finding if the patient is asymptomatic).</p>
+                <div class="phase-tags">
+                  <span>Dual Encoder</span>
+                  <span>Cross-Attention Fusion</span>
+                  <span>Visual + Text Receipts</span>
                 </div>
               </div>
             </div>
 
             <!-- Phase 3 -->
-            <div class="phase-card card">
-              <div class="phase-milestone-marker">PHASE 3</div>
-              <div class="phase-badge polish">The Polish & Surgical Precision</div>
-              <h3 class="phase-title">Advanced Segmentation & Pixel Outlines</h3>
-              <div class="phase-content">
-                <div class="phase-section">
-                  <span class="p-sub"><i data-lucide="database"></i> Datasets:</span>
-                  <p>SIIM-ACR Pneumothorax Segmentation, Montgomery County / Shenzhen TB datasets, QaTa-COV19.</p>
-                </div>
-                <div class="phase-section">
-                  <span class="p-sub"><i data-lucide="cpu"></i> Task:</span>
-                  <p>Migrate from diffuse Grad-CAM blobs to pixel-accurate segmentation masks using U-Net, nnU-Net, or Mask R-CNN.</p>
-                </div>
-                <div class="phase-section">
-                  <span class="p-sub"><i data-lucide="eye"></i> Output & Explainability:</span>
-                  <p>Draws vector polygon boundaries around pleural effusions, atelectasis, and lung consolidations. Enables volumetric and surface area measurements for surgical teams.</p>
-                </div>
-                <div class="phase-deliverables">
-                  <span class="badge-tag">Dice Coefficient > 0.85</span>
-                  <span class="badge-tag">Vector Polygon Masks</span>
-                  <span class="badge-tag">Volumetric Quantification</span>
+            <div class="card phase-item">
+              <div class="phase-left">
+                <span class="phase-step-badge">Phase 3</span>
+                <span class="phase-role">The Polish</span>
+              </div>
+              <div class="phase-main">
+                <h3>Advanced Segmentation</h3>
+                <p>Move from blurry heatmaps to exact pixel outlines using <strong>U-Net</strong> or <strong>Mask R-CNN</strong>, providing surgeons with clean vector boundaries around problem areas.</p>
+                <div class="phase-tags">
+                  <span>U-Net</span>
+                  <span>Precise Outlines</span>
+                  <span>Surgical Precision</span>
                 </div>
               </div>
             </div>
-          </div>
-
-          <!-- Interactive Code & Pipeline Architecture Snippet -->
-          <div class="pipeline-code-card card">
-            <div class="code-card-header">
-              <div class="code-title">
-                <i data-lucide="code-2"></i>
-                <span>PyTorch Hackathon Implementation Blueprint (`multimodal_fusion.py`)</span>
-              </div>
-              <div class="code-actions">
-                <button class="mini-btn" id="copy-code-btn"><i data-lucide="copy"></i> Copy Code</button>
-              </div>
-            </div>
-            <pre class="code-block-body"><code><span class="code-kw">import</span> torch
-<span class="code-kw">import</span> torch.nn <span class="code-kw">as</span> nn
-<span class="code-kw">from</span> transformers <span class="code-kw">import</span> AutoModel
-<span class="code-kw">from</span> torchvision.models <span class="code-kw">import</span> densenet121
-
-<span class="code-kw">class</span> <span class="code-fn">MultimodalMedicalIntelligence</span>(nn.Module):
-    <span class="code-kw">def</span> <span class="code-fn">__init__</span>(self, num_classes=<span class="code-num">14</span>, embed_dim=<span class="code-num">512</span>):
-        <span class="code-fn">super</span>().__init__()
-        <span class="code-cmt"># Phase 1: Vision Encoder (Extract spatial feature grid)</span>
-        vision_base = densenet121(weights=<span class="code-str">"DEFAULT"</span>)
-        self.vision_encoder = vision_base.features  <span class="code-cmt"># Output shape: [B, 1024, H/32, W/32]</span>
-        self.vis_proj = nn.Conv2d(<span class="code-num">1024</span>, embed_dim, kernel_size=<span class="code-num">1</span>)
-        
-        <span class="code-cmt"># Phase 2: Text Encoder (ClinicalBERT)</span>
-        self.text_encoder = AutoModel.from_pretrained(<span class="code-str">"emilyalsentzer/Bio_ClinicalBERT"</span>)
-        self.txt_proj = nn.Linear(self.text_encoder.config.hidden_size, embed_dim)
-        
-        <span class="code-cmt"># Cross-Attention Multimodal Fusion (The Brain)</span>
-        self.cross_attention = nn.MultiheadAttention(embed_dim=embed_dim, num_heads=<span class="code-num">8</span>, batch_first=<span class="code-kw">True</span>)
-        
-        <span class="code-cmt"># Calibrated Classifier & Temperature Scaling</span>
-        self.classifier = nn.Linear(embed_dim, num_classes)
-        self.temperature = nn.Parameter(torch.ones(<span class="code-num">1</span>) * <span class="code-num">1.5</span>)
-
-    <span class="code-kw">def</span> <span class="code-fn">forward</span>(self, images, text_input_ids, text_attn_mask):
-        <span class="code-cmt"># 1. Vision Features (spatial tokens)</span>
-        vis_feat = self.vis_proj(self.vision_encoder(images)) <span class="code-cmt"># [B, embed_dim, 16, 16]</span>
-        B, C, H, W = vis_feat.shape
-        vis_tokens = vis_feat.flatten(<span class="code-num">2</span>).permute(<span class="code-num">0</span>, <span class="code-num">2</span>, <span class="code-num">1</span>)    <span class="code-cmt"># [B, 256, embed_dim]</span>
-        
-        <span class="code-cmt"># 2. Text Features</span>
-        text_out = self.text_encoder(input_ids=text_input_ids, attention_mask=text_attn_mask)
-        txt_tokens = self.txt_proj(text_out.last_hidden_state)  <span class="code-cmt"># [B, SeqLen, embed_dim]</span>
-        
-        <span class="code-cmt"># 3. Cross-Modal Fusion (Text attends to Visual Features)</span>
-        fused_tokens, attn_weights = self.cross_attention(
-            query=txt_tokens, key=vis_tokens, value=vis_tokens
-        )
-        
-        <span class="code-cmt"># 4. Calibrated Prediction & Evidence Receipts</span>
-        pooled = fused_tokens.mean(dim=<span class="code-num">1</span>)
-        logits = self.classifier(pooled)
-        calibrated_probs = torch.sigmoid(logits / self.temperature)
-        
-        <span class="code-kw">return</span> calibrated_probs, attn_weights</code></pre>
           </div>
         </section>
       </main>
 
-      <!-- Footer / Evaluation Benchmark Banner -->
+      <!-- Clean Minimal Footer -->
       <footer class="app-footer">
-        <div class="footer-left">
-          <span>PULSE-CV Diagnostic Framework</span>
-          <span class="dot-separator">•</span>
-          <span>Dual Modality (Vision + NLP)</span>
-          <span class="dot-separator">•</span>
-          <span>Zero Hallucinations Verified</span>
-        </div>
-        <div class="footer-right">
-          <span>Hackathon Ready: MIMIC-CXR &amp; CheXpert Standard</span>
-        </div>
+        <span>PULSE-CV • Multimodal Medical Image Intelligence</span>
+        <span class="footer-sub">Evidence-Based • Calibrated Confidence • Non-Autonomous Co-Pilot</span>
       </footer>
     </div>
 
-    <!-- Export Modal Dialog -->
+    <!-- Clean Export Modal -->
     <dialog id="report-modal" class="modal">
-      <div class="modal-box">
+      <div class="modal-box card">
         <div class="modal-header">
-          <h3><i data-lucide="file-text"></i> Formal Clinical Diagnostic Receipt Note</h3>
+          <h3><i data-lucide="file-text"></i> Clinical Diagnostic Summary</h3>
           <button id="close-modal-btn" class="close-btn"><i data-lucide="x"></i></button>
         </div>
         <div class="modal-body" id="report-modal-body">
           <!-- Dynamically populated report -->
         </div>
         <div class="modal-footer">
-          <button id="print-report-btn" class="btn-primary"><i data-lucide="printer"></i> Print / Save PDF</button>
+          <button id="print-report-btn" class="btn-primary"><i data-lucide="printer"></i> Print / PDF</button>
           <button id="dismiss-modal-btn" class="btn-secondary">Close</button>
         </div>
       </div>
