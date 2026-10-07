@@ -580,6 +580,74 @@ function initApiKeyModal() {
   }
 }
 
+function initDoctorNotesModal() {
+  const modal = document.getElementById('doctor-notes-modal');
+  const openBtn = document.getElementById('edit-doctor-notes-btn');
+  const closeBtn = document.getElementById('close-doctor-notes-modal');
+  const dismissBtn = document.getElementById('dismiss-doctor-notes-modal');
+  const applyBtn = document.getElementById('apply-doctor-notes-btn');
+  const textarea = document.getElementById('doctor-notes-textarea');
+
+  const templates = {
+    'fever-cough': "Patient presents with [[4-day worsening productive cough with purulent rust-colored sputum]]. Reports [[tactile fevers reaching 102.5°F]] and right pleuritic pain. Auscultation reveals [[dense inspiratory crackles in right lower base]]. Normal heart sounds.",
+    'heart-failure': "Patient presents with [[severe 3-pillow orthopnea]] and [[bilateral lower extremity 3+ pitting pedal edema]]. Reports [[paroxysmal nocturnal dyspnea (PND)]] and 10 lb acute fluid weight gain. S3 gallop audible on precordial auscultation. Denies fevers.",
+    'pleuritic-ptx': "Patient presents with [[acute onset sudden sharp left pleuritic chest pain]] while seated, accompanied by [[dyspnea at rest]]. Auscultation confirms [[markedly diminished to absent breath sounds over the left apex]]. Normal leukocyte count.",
+    'asymptomatic-screen': "Asymptomatic executive presenting for annual screening. [[Former 25 pack-year cigarette smoker, quit 4 years ago]]. [[Denies cough, hemoptysis, fevers, or dyspnea]]. Lungs clear bilaterally to auscultation."
+  };
+
+  if (openBtn && modal && textarea) {
+    openBtn.addEventListener('click', () => {
+      const c = BENCHMARK_CASES[currentCaseIndex];
+      textarea.value = c?.patient?.notes || '';
+      modal.showModal();
+    });
+
+    closeBtn?.addEventListener('click', () => modal.close());
+    dismissBtn?.addEventListener('click', () => modal.close());
+
+    // Template chips
+    modal.querySelectorAll('.template-chip').forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const key = chip.dataset.template;
+        if (templates[key]) {
+          textarea.value = templates[key];
+        }
+      });
+    });
+
+    applyBtn?.addEventListener('click', async () => {
+      const newNotes = textarea.value.trim();
+      if (!newNotes) return;
+
+      applyBtn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> Updating AI...';
+      initIcons();
+
+      const c = BENCHMARK_CASES[currentCaseIndex];
+      c.patient.notes = newNotes;
+
+      // Update EHR notes render box with highlighted tokens
+      const notesContainer = document.getElementById('clinical-notes-render');
+      if (notesContainer) {
+        notesContainer.innerHTML = newNotes.replace(/\[\[(.*?)\]\]/g, (m, p1) => {
+          return `<span class="grounded-token">${p1}</span>`;
+        });
+      }
+
+      // Also sync to Quick Context input
+      const quickInput = document.getElementById('custom-ehr-input');
+      if (quickInput) {
+        quickInput.value = newNotes.replace(/\[\[(.*?)\]\]/g, '$1').slice(0, 80);
+      }
+
+      await triggerAnalysis(c);
+
+      applyBtn.innerHTML = '<i data-lucide="check"></i> Submit Doctor\'s Note to AI';
+      initIcons();
+      modal.close();
+    });
+  }
+}
+
 async function checkBackendHealth() {
   try {
     const res = await fetch(`${BACKEND_API}/health`);
