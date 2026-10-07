@@ -180,29 +180,71 @@ export class MedicalImageRenderer {
     ctx.lineTo(w - 60, 560);
     ctx.fill();
 
-    // If specific case has localized pathology (e.g. dense infiltrate or pneumothorax)
-    if (this.currentCase && this.currentCase.id === 'case-pneumonia-1') {
-      // Dense consolidation in RLL
-      const infGrad = ctx.createRadialGradient(380, 390, 10, 380, 390, 80);
-      infGrad.addColorStop(0, 'rgba(255, 255, 255, 0.45)');
-      infGrad.addColorStop(0.6, 'rgba(255, 255, 255, 0.25)');
-      infGrad.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
-      ctx.fillStyle = infGrad;
-      ctx.beginPath();
-      ctx.arc(380, 390, 80, 0, Math.PI * 2);
-      ctx.fill();
-    } else if (this.currentCase && this.currentCase.id === 'case-cardiomegaly-2') {
-      // Huge enlarged cardiac silhouette
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
-      ctx.beginPath();
-      ctx.ellipse(320, 360, 120, 95, 0.2, 0, Math.PI * 2);
-      ctx.fill();
-    } else if (this.currentCase && this.currentCase.id === 'case-nodule-4') {
-      // Small circumscribed nodule
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-      ctx.beginPath();
-      ctx.arc(210, 190, 16, 0, Math.PI * 2);
-      ctx.fill();
+    // Dynamic localized pathology rendering for all multi-dataset cohorts
+    if (this.currentCase && this.currentCase.vision && this.currentCase.vision.heatCenter) {
+      const hc = this.currentCase.vision.heatCenter;
+      const cid = this.currentCase.id || '';
+      if (hc.radius > 0) {
+        if (cid.includes('nodule')) {
+          // Circumscribed dense nodule
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+          ctx.beginPath();
+          ctx.arc(hc.x, hc.y, 16, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (cid.includes('tb')) {
+          // Thick-walled cavitation (ring)
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+          ctx.beginPath();
+          ctx.arc(hc.x, hc.y, 35, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#0a0e17';
+          ctx.beginPath();
+          ctx.arc(hc.x, hc.y, 16, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (cid.includes('cardiomegaly')) {
+          // Huge enlarged cardiac silhouette
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+          ctx.beginPath();
+          ctx.ellipse(320, 360, 125, 100, 0.2, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (cid.includes('pneumothorax')) {
+          // Pleural separation lucency line
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.arc(hc.x, hc.y + 20, 48, Math.PI * 0.9, Math.PI * 1.8);
+          ctx.stroke();
+        } else if (cid.includes('effusion')) {
+          // Fluid meniscus at costophrenic angle
+          const fluidGrad = ctx.createLinearGradient(300, 380, 480, 500);
+          fluidGrad.addColorStop(0, 'rgba(255, 255, 255, 0.1)');
+          fluidGrad.addColorStop(1, 'rgba(255, 255, 255, 0.65)');
+          ctx.fillStyle = fluidGrad;
+          ctx.beginPath();
+          ctx.moveTo(330, 420);
+          ctx.quadraticCurveTo(400, 420, 470, 400);
+          ctx.lineTo(470, 520);
+          ctx.lineTo(330, 520);
+          ctx.fill();
+        } else if (cid.includes('sarcoid')) {
+          // Bilateral hilar adenopathy shadows
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+          ctx.beginPath();
+          ctx.arc(235, 270, 26, 0, Math.PI * 2);
+          ctx.arc(365, 270, 26, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          // General consolidative infiltrate / ground-glass gradient
+          const infGrad = ctx.createRadialGradient(hc.x, hc.y, 10, hc.x, hc.y, hc.radius);
+          infGrad.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
+          infGrad.addColorStop(0.6, 'rgba(255, 255, 255, 0.28)');
+          infGrad.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
+          ctx.fillStyle = infGrad;
+          ctx.beginPath();
+          ctx.arc(hc.x, hc.y, hc.radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
     }
 
     ctx.restore();
