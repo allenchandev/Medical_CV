@@ -7,7 +7,7 @@
   },
   "dataset_features": {
     "CASE_PN_01": {
-      "label": "Pneumonia",
+      "label": "Bacterial Lobar Pneumonia",
       "features": {
         "dimensions": [
           600,
@@ -15,45 +15,114 @@
         ],
         "quadrant_densities": {
           "RUL": 0.111,
-          "RLL": 0.12,
+          "RLL": 0.189,
           "LUL": 0.105,
-          "LLL": 0.382
+          "LLL": 0.45
         },
-        "cardiothoracic_ratio": 0.525,
+        "cardiothoracic_ratio": 0.539,
         "peak_activation_coordinate": {
           "x": 380,
           "y": 340
+        },
+        "peak_density": 0.706,
+        "blur_variance": 4e-06,
+        "is_degraded": true
+      }
+    },
+    "CASE_CM_02": {
+      "label": "Cardiomegaly & Pulm. Edema",
+      "features": {
+        "dimensions": [
+          600,
+          600
+        ],
+        "quadrant_densities": {
+          "RUL": 0.164,
+          "RLL": 0.352,
+          "LUL": 0.166,
+          "LLL": 0.368
+        },
+        "cardiothoracic_ratio": 0.572,
+        "peak_activation_coordinate": {
+          "x": 280,
+          "y": 280
+        },
+        "peak_density": 0.675,
+        "blur_variance": 4e-06,
+        "is_degraded": true
+      }
+    },
+    "CASE_PTX_03": {
+      "label": "Apical Pneumothorax",
+      "features": {
+        "dimensions": [
+          600,
+          600
+        ],
+        "quadrant_densities": {
+          "RUL": 0.111,
+          "RLL": 0.187,
+          "LUL": 0.294,
+          "LLL": 0.169
+        },
+        "cardiothoracic_ratio": 0.259,
+        "peak_activation_coordinate": {
+          "x": 400,
+          "y": 140
+        },
+        "peak_density": 0.725,
+        "blur_variance": 4e-06,
+        "is_degraded": true
+      }
+    },
+    "CASE_NOD_04": {
+      "label": "Solitary Pulmonary Nodule",
+      "features": {
+        "dimensions": [
+          600,
+          600
+        ],
+        "quadrant_densities": {
+          "RUL": 0.195,
+          "RLL": 0.187,
+          "LUL": 0.105,
+          "LLL": 0.169
+        },
+        "cardiothoracic_ratio": 0.259,
+        "peak_activation_coordinate": {
+          "x": 220,
+          "y": 200
         },
         "peak_density": 0.659,
         "blur_variance": 4e-06,
         "is_degraded": true
       }
     },
-    "CASE_CM_02": {
-      "label": "Cardiomegaly",
+    "CASE_EFF_05": {
+      "label": "Moderate Pleural Effusion",
       "features": {
         "dimensions": [
           600,
           600
         ],
         "quadrant_densities": {
-          "RUL": 0.159,
-          "RLL": 0.278,
-          "LUL": 0.161,
-          "LLL": 0.28
+          "RUL": 0.111,
+          "RLL": 0.187,
+          "LUL": 0.105,
+          "LLL": 0.383
         },
-        "cardiothoracic_ratio": 0.525,
+        "cardiothoracic_ratio": 0.544,
         "peak_activation_coordinate": {
-          "x": 280,
-          "y": 280
+          "x": 400,
+          "y": 400
         },
-        "peak_density": 0.635,
+        "peak_density": 0.71,
         "blur_variance": 4e-06,
         "is_degraded": true
       }
     },
-    "CASE_PTX_03": {
-      "label": "Pneumothorax",
+    "CASE_NORM_06": {
+      "label": "Unremarkable Baseline Scan",
       "features": {
         "dimensions": [
           600,
@@ -61,63 +130,155 @@
         ],
         "quadrant_densities": {
           "RUL": 0.111,
-          "RLL": 0.118,
-          "LUL": 0.278,
-          "LLL": 0.109
-        },
-        "cardiothoracic_ratio": 0.234,
-        "peak_activation_coordinate": {
-          "x": 400,
-          "y": 140
-        },
-        "peak_density": 0.675,
-        "blur_variance": 3e-06,
-        "is_degraded": true
-      }
-    },
-    "CASE_NOD_04": {
-      "label": "Pulmonary Nodule",
-      "features": {
-        "dimensions": [
-          600,
-          600
-        ],
-        "quadrant_densities": {
-          "RUL": 0.189,
-          "RLL": 0.118,
+          "RLL": 0.187,
           "LUL": 0.105,
-          "LLL": 0.109
+          "LLL": 0.169
         },
-        "cardiothoracic_ratio": 0.234,
-        "peak_activation_coordinate": {
-          "x": 220,
-          "y": 200
-        },
-        "peak_density": 0.623,
-        "blur_variance": 3e-06,
-        "is_degraded": true
-      }
-    },
-    "CASE_NORM_05": {
-      "label": "Normal Baseline",
-      "features": {
-        "dimensions": [
-          600,
-          600
-        ],
-        "quadrant_densities": {
-          "RUL": 0.111,
-          "RLL": 0.118,
-          "LUL": 0.105,
-          "LLL": 0.109
-        },
-        "cardiothoracic_ratio": 0.234,
+        "cardiothoracic_ratio": 0.259,
         "peak_activation_coordinate": {
           "x": 280,
           "y": 320
         },
         "peak_density": 0.294,
         "blur_variance": 3e-06,
+        "is_degraded": true
+      }
+    },
+    "CASE_TB_07": {
+      "label": "Apical Cavitary Tuberculosis",
+      "features": {
+        "dimensions": [
+          600,
+          600
+        ],
+        "quadrant_densities": {
+          "RUL": 0.111,
+          "RLL": 0.187,
+          "LUL": 0.224,
+          "LLL": 0.169
+        },
+        "cardiothoracic_ratio": 0.259,
+        "peak_activation_coordinate": {
+          "x": 420,
+          "y": 140
+        },
+        "peak_density": 0.568,
+        "blur_variance": 4e-06,
+        "is_degraded": true
+      }
+    },
+    "CASE_COV_08": {
+      "label": "Bilateral Ground-Glass Opacities",
+      "features": {
+        "dimensions": [
+          600,
+          600
+        ],
+        "quadrant_densities": {
+          "RUL": 0.149,
+          "RLL": 0.411,
+          "LUL": 0.106,
+          "LLL": 0.199
+        },
+        "cardiothoracic_ratio": 0.456,
+        "peak_activation_coordinate": {
+          "x": 240,
+          "y": 300
+        },
+        "peak_density": 0.655,
+        "blur_variance": 4e-06,
+        "is_degraded": true
+      }
+    },
+    "CASE_ATE_09": {
+      "label": "Bibasilar Subsegmental Atelectasis",
+      "features": {
+        "dimensions": [
+          600,
+          600
+        ],
+        "quadrant_densities": {
+          "RUL": 0.111,
+          "RLL": 0.187,
+          "LUL": 0.105,
+          "LLL": 0.311
+        },
+        "cardiothoracic_ratio": 0.509,
+        "peak_activation_coordinate": {
+          "x": 380,
+          "y": 420
+        },
+        "peak_density": 0.627,
+        "blur_variance": 4e-06,
+        "is_degraded": true
+      }
+    },
+    "CASE_FIB_10": {
+      "label": "Idiopathic Pulmonary Fibrosis",
+      "features": {
+        "dimensions": [
+          600,
+          600
+        ],
+        "quadrant_densities": {
+          "RUL": 0.111,
+          "RLL": 0.35,
+          "LUL": 0.105,
+          "LLL": 0.169
+        },
+        "cardiothoracic_ratio": 0.442,
+        "peak_activation_coordinate": {
+          "x": 200,
+          "y": 400
+        },
+        "peak_density": 0.671,
+        "blur_variance": 4e-06,
+        "is_degraded": true
+      }
+    },
+    "CASE_PE_11": {
+      "label": "Westermark Sign (Pulmonary Embolism)",
+      "features": {
+        "dimensions": [
+          600,
+          600
+        ],
+        "quadrant_densities": {
+          "RUL": 0.274,
+          "RLL": 0.22,
+          "LUL": 0.105,
+          "LLL": 0.169
+        },
+        "cardiothoracic_ratio": 0.498,
+        "peak_activation_coordinate": {
+          "x": 200,
+          "y": 220
+        },
+        "peak_density": 0.592,
+        "blur_variance": 4e-06,
+        "is_degraded": true
+      }
+    },
+    "CASE_HIL_12": {
+      "label": "Bilateral Hilar Lymphadenopathy (Sarcoidosis)",
+      "features": {
+        "dimensions": [
+          600,
+          600
+        ],
+        "quadrant_densities": {
+          "RUL": 0.116,
+          "RLL": 0.187,
+          "LUL": 0.254,
+          "LLL": 0.214
+        },
+        "cardiothoracic_ratio": 0.458,
+        "peak_activation_coordinate": {
+          "x": 360,
+          "y": 240
+        },
+        "peak_density": 0.686,
+        "blur_variance": 4e-06,
         "is_degraded": true
       }
     }
